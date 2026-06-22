@@ -575,14 +575,6 @@
   <!-- ══════ 左列：个人资料 ══════ -->
   <div class="profile-col">
 
-    <!-- 近日动态（在左栏内） -->
-    <div class="card feed-card">
-      <div class="card-title">
-        <i style="color:#f09c5a;" class="fas fa-rss"></i> 近日动态
-      </div>
-      <div id="feedList"></div>
-    </div>
-
     <div class="card avatar-card">
       <div class="profile-label">I'm 🍊</div>
       <h1 class="profile-name">xqaxqa</h1>
@@ -600,6 +592,14 @@
       <a href="#about" class="about-link" onclick="document.querySelector('.notice-card').scrollIntoView({behavior:'smooth'});return false;">
         关于我 <i class="fas fa-arrow-right"></i>
       </a>
+    </div>
+
+    <!-- 近日动态（在个人资料下方） -->
+    <div class="card feed-card">
+      <div class="card-title">
+        <i style="color:#f09c5a;" class="fas fa-rss"></i> 近日动态
+      </div>
+      <div id="feedList"></div>
     </div>
 
   </div><!-- /左列 -->
