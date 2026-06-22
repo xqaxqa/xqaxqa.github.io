@@ -291,6 +291,9 @@
     .gallery-item:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
     .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
     .gallery-item:hover img { transform: scale(1.08); }
+    .gallery-grid { transition: max-height 0.4s ease, opacity 0.3s ease; overflow: hidden; }
+    .gallery-grid.collapsed { max-height: 0; opacity: 0; padding: 0; margin: 0; pointer-events: none; }
+    .gallery-grid:not(.collapsed) { max-height: 2000px; opacity: 1; }
     .gallery-label {
       position: absolute; bottom: 0; left: 0; right: 0;
       padding: 5px 7px;
@@ -299,6 +302,15 @@
       text-align: center; opacity: 0; transition: opacity 0.3s;
     }
     .gallery-item:hover .gallery-label { opacity: 1; }
+    .gallery-toggle-btn {
+      margin-left: auto; padding: 4px 12px; border-radius: 7px;
+      font-size: 0.78em; color: var(--text-dim);
+      border: 1px solid var(--card-border);
+      background: transparent; cursor: pointer;
+      transition: all 0.22s;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .gallery-toggle-btn:hover { color: var(--text); border-color: var(--accent); background: rgba(240,156,90,0.07); }
 
     /* 游戏技能 */
     .games-card { padding: 22px; }
@@ -510,8 +522,9 @@
     <div class="card gallery-card">
       <div class="card-title">
         <i style="color:#b794f6;" class="fas fa-images"></i> 图片展示
+        <button class="gallery-toggle-btn" id="galleryToggle" onclick="toggleGallery()"><i class="fas fa-eye"></i> 展开</button>
       </div>
-      <div class="gallery-grid">
+      <div class="gallery-grid collapsed" id="galleryGrid">
         <div class="gallery-item" onclick="openLightbox(0)"><img src="images/car_01.jpg" alt=""><span class="gallery-label">🚗 法拉利 F40</span></div>
         <div class="gallery-item" onclick="openLightbox(1)"><img src="images/car_02.jpg" alt=""><span class="gallery-label">🚗 法拉利 F40</span></div>
         <div class="gallery-item" onclick="openLightbox(2)"><img src="images/car_03.jpg" alt=""><span class="gallery-label">🏎️ Valkyrie</span></div>
@@ -816,6 +829,15 @@
     if (e.key === 'ArrowLeft') lbPrev();
     if (e.key === 'ArrowRight') lbNext();
   });
+
+  // 图片展示折叠
+  function toggleGallery() {
+    var grid = document.getElementById('galleryGrid');
+    var btn = document.getElementById('galleryToggle');
+    var isCollapsed = grid.classList.contains('collapsed');
+    grid.classList.toggle('collapsed');
+    btn.innerHTML = isCollapsed ? '<i class="fas fa-eye-slash"></i> 收起' : '<i class="fas fa-eye"></i> 展开';
+  }
 
   // Blog弹窗
   var blogData = {

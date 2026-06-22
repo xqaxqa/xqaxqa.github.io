@@ -1,9 +1,9 @@
 {
   "id": "session-1782113450672-1johf6",
-  "name": "主页重做",
+  "name": "主页布局重做",
   "status": "active",
   "createdAt": "2026-06-22T09:24:43.442Z",
-  "updatedAt": "2026-06-22T11:55:59.483Z",
+  "updatedAt": "2026-06-22T12:01:03.045Z",
   "agents": [
     {
       "id": "agent_nkd2pwz4",
@@ -17,9 +17,9 @@
   ],
   "summary": {
     "id": "summary_dq1rrzk1",
-    "title": "主页重做",
+    "title": "主页布局重做",
     "createdAt": "2026-06-22T09:24:43.442Z",
     "file": "summary_dq1rrzk1.md"
   },
-  "lastMessageCount": 49
+  "lastMessageCount": 62
 }
