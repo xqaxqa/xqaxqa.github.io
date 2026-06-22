@@ -1,9 +1,9 @@
 {
   "id": "session-1782113450672-1johf6",
-  "name": "跑车网站上传",
+  "name": "主页重做",
   "status": "active",
   "createdAt": "2026-06-22T09:24:43.442Z",
-  "updatedAt": "2026-06-22T09:36:57.378Z",
+  "updatedAt": "2026-06-22T11:55:59.483Z",
   "agents": [
     {
       "id": "agent_nkd2pwz4",
@@ -17,9 +17,9 @@
   ],
   "summary": {
     "id": "summary_dq1rrzk1",
-    "title": "跑车网站上传",
+    "title": "主页重做",
     "createdAt": "2026-06-22T09:24:43.442Z",
     "file": "summary_dq1rrzk1.md"
   },
-  "lastMessageCount": 91
+  "lastMessageCount": 49
 }

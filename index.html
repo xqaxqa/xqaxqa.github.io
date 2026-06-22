@@ -6,7 +6,7 @@
   <title>xqaxqa - 个人主页</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
       --bg: #0a0e17;
@@ -18,8 +18,9 @@
       --accent2: #83cbac;
       --accent3: #f0a1a8;
       --live-green: #4ade80;
-      --live-red: #ff6b6b;
     }
+
+    html { scroll-behavior: smooth; }
 
     body {
       font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
@@ -27,7 +28,6 @@
       color: var(--text);
       min-height: 100vh;
       overflow-x: hidden;
-      position: relative;
     }
 
     /* ===== Canvas 粒子流 ===== */
@@ -36,18 +36,17 @@
       pointer-events: none;
     }
 
-    /* ===== 主容器 ===== */
+    /* ===== 主容器：两栏 ===== */
     .container {
       position: relative;
       z-index: 1;
-      max-width: 1140px;
+      max-width: 1080px;
       margin: 0 auto;
-      padding: 36px 28px;
+      padding: 40px 24px;
       display: grid;
-      grid-template-columns: 300px 1fr 64px;
-      gap: 18px;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
       align-items: start;
-      align-content: start;
     }
 
     /* ===== 卡片通用 ===== */
@@ -56,514 +55,341 @@
       border: 1px solid var(--card-border);
       border-radius: 14px;
       backdrop-filter: blur(16px);
-      transition: all 0.3s cubic-bezier(.25,.46,.45,.94);
-      position: relative;
-      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
     }
     .card:hover {
-      border-color: rgba(255,255,255,0.15);
-      transform: translateY(-3px);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.35), 0 0 24px rgba(240,156,90,0.06);
+      border-color: rgba(255,255,255,0.14);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
     }
+    .card-title {
+      font-size: 0.88em;
+      font-weight: 600;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text);
+      letter-spacing: 0.02em;
+    }
+    .card-title i { width: 18px; text-align: center; }
 
-    /* ═══ 左列：个人资料 ═══ */
-    .profile-col {
+    /* ===== 左列 ===== */
+    .left-col {
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 16px;
+      position: sticky;
+      top: 24px;
     }
+
     .avatar-card { padding: 28px 20px; text-align: center; }
     .profile-label {
-      font-size: 0.78em;
+      font-size: 0.76em;
       color: var(--text-dim);
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
     .profile-name {
-      font-size: 1.6em;
+      font-size: 1.55em;
       font-weight: 700;
       background: linear-gradient(135deg, var(--accent3) 0%, var(--accent) 50%, var(--accent2) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
       line-height: 1.3;
     }
     .profile-avatar-wrap {
-      position: relative;
-      width: 180px;
-      height: 220px;
-      margin: 20px auto 0;
+      width: 160px;
+      height: 200px;
+      margin: 18px auto 0;
       border: 2px dashed var(--card-border);
-      border-radius: 16px;
+      border-radius: 14px;
       overflow: hidden;
-      transition: all 0.3s ease;
+      transition: border-color 0.3s, border-style 0.3s;
     }
-    .profile-avatar-wrap:hover {
-      border-color: var(--accent);
-      border-style: solid;
-    }
+    .profile-avatar-wrap:hover { border-color: var(--accent); border-style: solid; }
     .profile-avatar {
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       object-fit: cover;
-      transition: transform 0.4s ease;
+      display: block;
+      transition: transform 0.4s;
     }
     .profile-avatar-wrap:hover .profile-avatar { transform: scale(1.05); }
     .profile-subtitle {
-      margin-top: 16px;
-      font-size: 0.84em;
+      margin-top: 14px;
+      font-size: 0.8em;
       color: var(--text-dim);
-      line-height: 1.6;
+      line-height: 1.7;
     }
     .about-link {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      margin-top: 16px;
-      padding: 8px 18px;
+      margin-top: 14px;
+      padding: 7px 16px;
       border-radius: 10px;
-      font-size: 0.82em;
+      font-size: 0.78em;
       color: var(--text-dim);
       border: 1px solid var(--card-border);
       text-decoration: none;
-      transition: all 0.25s ease;
+      transition: all 0.25s;
     }
     .about-link:hover {
       color: var(--text);
       border-color: var(--accent);
       background: rgba(240,156,90,0.08);
     }
-    .about-link i { transition: transform 0.25s; }
     .about-link:hover i { transform: translateX(3px); }
 
-    /* ═══ 中间：内容区 ═══ */
-    .content-col {
+    /* 左列图标 */
+    .left-icons {
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 10px;
     }
-    .card-title {
-      font-size: 0.95em;
-      font-weight: 600;
-      margin-bottom: 14px;
+    .left-icon {
       display: flex;
       align-items: center;
-      gap: 9px;
-      letter-spacing: 0.02em;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 0.82em;
+      color: var(--text-dim);
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      text-decoration: none;
+      transition: all 0.25s;
     }
-    .card-title i { font-size: 1em; width: 20px; text-align: center; }
+    .left-icon:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: rgba(240,156,90,0.07);
+      transform: translateX(4px);
+    }
+    .left-icon i { width: 16px; text-align: center; font-size: 1em; }
 
-    /* --- 直播状态卡 --- */
-    .stream-card { padding: 24px; }
+    /* ===== 右列 ===== */
+    .right-col {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* 间距卡片 wrapper */
+    .section-block { display: flex; flex-direction: column; gap: 16px; }
+
+    /* 直播状态 */
+    .stream-card { padding: 22px; }
     .stream-status {
       display: flex;
       align-items: center;
-      gap: 20px;
-      padding: 20px;
-      border-radius: 14px;
-      transition: all 0.4s ease;
+      gap: 18px;
+      padding: 18px;
+      border-radius: 12px;
+      transition: all 0.4s;
     }
-    /* 开播中 */
     .stream-status.live {
-      background: linear-gradient(135deg, rgba(74,222,128,0.12), rgba(74,222,128,0.04));
+      background: linear-gradient(135deg, rgba(74,222,128,0.1), rgba(74,222,128,0.03));
       border: 1px solid rgba(74,222,128,0.2);
     }
-    /* 未开播 */
     .stream-status.offline {
-      background: linear-gradient(135deg, rgba(94,109,130,0.08), rgba(94,109,130,0.03));
+      background: rgba(255,255,255,0.02);
       border: 1px solid rgba(255,255,255,0.06);
     }
     .stream-icon-wrap {
-      width: 80px;
-      height: 80px;
+      width: 72px; height: 72px;
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
-      font-size: 2em;
-      position: relative;
+      font-size: 1.8em;
     }
     .stream-status.live .stream-icon-wrap {
       background: rgba(74,222,128,0.15);
       color: var(--live-green);
-      animation: pulse-live 2s ease-in-out infinite;
+      animation: pulse-ring 2s ease-in-out infinite;
     }
     .stream-status.offline .stream-icon-wrap {
-      background: rgba(94,109,130,0.12);
+      background: rgba(94,109,130,0.1);
       color: var(--text-dim);
     }
-    @keyframes pulse-live {
+    @keyframes pulse-ring {
       0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.3); }
       50% { box-shadow: 0 0 0 10px rgba(74,222,128,0); }
     }
     .stream-info h3 {
-      font-size: 1em;
+      font-size: 0.95em;
       font-weight: 600;
       margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      display: flex; align-items: center; gap: 8px;
     }
     .live-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 2px 10px;
-      border-radius: 20px;
-      font-size: 0.7em;
-      font-weight: 700;
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 9px; border-radius: 20px;
+      font-size: 0.68em; font-weight: 700;
       letter-spacing: 0.04em;
-      animation: blink-live 1.5s ease-in-out infinite;
     }
-    .live-badge.on {
-      background: var(--live-green);
-      color: #000;
-    }
-    .live-badge.off {
-      background: rgba(94,109,130,0.2);
-      color: var(--text-dim);
-    }
-    @keyframes blink-live {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.7; }
-    }
-    .stream-info p {
-      font-size: 0.82em;
-      color: var(--text-dim);
-      line-height: 1.55;
-    }
-    .stream-info .last-stream {
-      margin-top: 6px;
-      font-size: 0.76em;
-      color: var(--text-dim);
-      opacity: 0.75;
-    }
-    .stream-footer { margin-top: 16px; }
+    .live-badge.on { background: var(--live-green); color: #000; animation: blink 1.5s ease-in-out infinite; }
+    .live-badge.off { background: rgba(94,109,130,0.2); color: var(--text-dim); }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+    .stream-info p { font-size: 0.8em; color: var(--text-dim); line-height: 1.5; }
+    .last-stream { margin-top: 4px; font-size: 0.74em; opacity: 0.7; }
+    .stream-btns { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
     .card-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 18px;
-      border-radius: 9px;
-      font-size: 0.84em;
-      color: var(--text-dim);
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border-radius: 9px;
+      font-size: 0.8em; color: var(--text-dim);
       border: 1px solid var(--card-border);
-      text-decoration: none;
-      transition: all 0.22s;
-      cursor: pointer;
-      background: transparent;
+      text-decoration: none; transition: all 0.22s; cursor: pointer; background: transparent;
     }
-    .card-btn:hover {
-      color: var(--text);
-      border-color: var(--accent);
-      background: rgba(240,156,90,0.07);
-    }
-    .card-btn i { font-size: 0.85em; transition: transform 0.22s; }
-    .card-btn:hover i { transform: translateX(3px); }
-    .card-btn.live-btn {
-      border-color: var(--live-green);
-      color: var(--live-green);
-      background: rgba(74,222,128,0.06);
-    }
-    .card-btn.live-btn:hover {
-      background: rgba(74,222,128,0.15);
-      box-shadow: 0 4px 16px rgba(74,222,128,0.15);
-    }
+    .card-btn:hover { color: var(--text); border-color: var(--accent); background: rgba(240,156,90,0.07); }
+    .card-btn:hover i { transform: translateX(2px); }
+    .card-btn.live-btn { border-color: var(--live-green); color: var(--live-green); background: rgba(74,222,128,0.06); }
+    .card-btn.live-btn:hover { background: rgba(74,222,128,0.14); }
 
-    /* --- 公告卡 --- */
-    .notice-card { padding: 22px 24px; font-size: 0.85em; line-height: 1.75; color: var(--text-dim); }
-    .feed-card { padding: 22px 24px; }
-    .feed-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--card-border); font-size: 0.88em; }
-    .feed-item:last-child { border-bottom: none; }
-    .feed-emoji { font-size: 1.2em; flex-shrink: 0; }
-    .feed-date { color: var(--accent); flex-shrink: 0; font-size: 0.85em; min-width: 80px; }
-    .feed-text { color: var(--text); line-height: 1.5; }
-    .game-stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
-    .game-stat-item { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 10px; background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); transition: transform .2s, background .2s; }
-    .game-stat-item:hover { transform: translateY(-2px); background: rgba(255,255,255,0.06); text-decoration: none; }
-    .game-stat-item img { width: 80px; height: 30px; object-fit: cover; border-radius: 4px; flex-shrink: 0; background: rgba(255,255,255,0.05); }
-    .game-stat-info { display: flex; flex-direction: column; gap: 2px; }
-    .game-stat-name { color: var(--text); font-size: 0.88em; font-weight: 500; }
-    .game-stat-hours { color: var(--accent); font-size: 0.82em; font-weight: 600; }
-
-    /* --- 游戏卡（原技能卡） --- */
-    .games-card { padding: 22px 24px; }
-    .game-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-    .game-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 16px;
-      border-radius: 8px;
-      font-size: 0.82em;
-      font-weight: 500;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--card-border);
-      color: var(--text);
-      transition: all 0.25s ease;
-    }
-    .game-chip i { font-size: 1em; }
-    .game-chip:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: rgba(240,156,90,0.07);
-      transform: translateY(-1px);
-    }
-    .game-desc-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      padding-top: 14px;
-      border-top: 1px solid rgba(255,255,255,0.04);
-    }
-    .game-stat {
-      text-align: center;
-      padding: 12px 8px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.03);
-    }
-    .game-stat i {
-      font-size: 1.5em;
-      margin-bottom: 6px;
-      display: block;
-    }
-    .game-stat .stat-label {
-      font-size: 0.72em;
-      color: var(--text-dim);
-    }
-    .game-stat .stat-val {
-      font-size: 0.88em;
-      font-weight: 600;
-      margin-top: 2px;
-    }
-
-    /* --- 图片展示 --- */
-    .gallery-card { padding: 20px 24px; }
-    .gallery-grid {
+    /* Steam 游戏 */
+    .notice-card { padding: 22px; }
+    .game-stats-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
     }
-    .gallery-item {
-      position: relative;
-      border-radius: 10px;
-      overflow: hidden;
-      cursor: pointer;
-      aspect-ratio: 16/10;
+    .game-stat-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px; border-radius: 10px;
+      background: rgba(255,255,255,0.03);
       border: 1px solid var(--card-border);
-      transition: all 0.3s ease;
+      transition: transform 0.2s, background 0.2s;
+      text-decoration: none;
     }
-    .gallery-item:hover {
-      border-color: var(--accent);
-      transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    .game-stat-item:hover { transform: translateY(-2px); background: rgba(255,255,255,0.06); }
+    .game-stat-item img {
+      width: 80px; height: 30px;
+      object-fit: cover; border-radius: 4px;
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.05);
     }
-    .gallery-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.4s ease;
+    .game-stat-info { display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
+    .game-stat-name { color: var(--text); font-size: 0.82em; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .game-stat-hours { color: var(--accent); font-size: 0.76em; font-weight: 600; }
+
+    /* 图片展示 */
+    .gallery-card { padding: 20px; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
     }
+    .gallery-item {
+      position: relative; border-radius: 10px; overflow: hidden;
+      cursor: pointer; aspect-ratio: 16/10;
+      border: 1px solid var(--card-border);
+      transition: all 0.3s;
+    }
+    .gallery-item:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
     .gallery-item:hover img { transform: scale(1.08); }
-    .gallery-item .gallery-label {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      padding: 6px 8px;
+    .gallery-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 5px 7px;
       background: linear-gradient(transparent, rgba(0,0,0,0.75));
-      font-size: 0.7em;
-      color: rgba(255,255,255,0.85);
-      text-align: center;
-      opacity: 0;
-      transition: opacity 0.3s ease;
+      font-size: 0.68em; color: rgba(255,255,255,0.85);
+      text-align: center; opacity: 0; transition: opacity 0.3s;
     }
     .gallery-item:hover .gallery-label { opacity: 1; }
 
-    /* --- 灯箱弹窗 --- */
-    .lightbox {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background: rgba(0,0,0,0.92);
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 16px;
-      padding: 20px;
+    /* 游戏技能 */
+    .games-card { padding: 22px; }
+    .game-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .game-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 8px;
+      font-size: 0.78em; font-weight: 500;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--card-border);
+      color: var(--text); transition: all 0.25s;
     }
-    .lightbox.show { display: flex; }
-    .lightbox img {
-      max-width: 90vw;
-      max-height: 80vh;
-      border-radius: 12px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-      object-fit: contain;
-    }
-    .lightbox-caption {
-      color: rgba(255,255,255,0.7);
-      font-size: 0.85em;
-      text-align: center;
-    }
-    .lightbox-close {
-      position: absolute;
-      top: 20px; right: 24px;
-      color: rgba(255,255,255,0.7);
-      font-size: 2em;
-      cursor: pointer;
-      transition: color 0.2s;
-      background: none; border: none;
-    }
-    .lightbox-close:hover { color: #fff; }
-    .lightbox-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.15);
-      color: #fff;
-      font-size: 1.5em;
-      width: 48px; height: 48px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
-    }
-    .lightbox-nav:hover { background: rgba(255,255,255,0.2); }
-    .lightbox-prev { left: 20px; }
-    .lightbox-next { right: 20px; }
-    .gallery-item span { display: block; margin-top: 8px; font-size: 0.76em; color: var(--text-dim); }
+    .game-chip:hover { border-color: var(--accent); color: var(--accent); background: rgba(240,156,90,0.07); transform: translateY(-1px); }
+    .game-desc-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.04); }
+    .game-stat { text-align: center; padding: 12px 6px; border-radius: 10px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.03); }
+    .game-stat i { font-size: 1.4em; margin-bottom: 6px; display: block; }
+    .stat-label { font-size: 0.7em; color: var(--text-dim); }
+    .stat-val { font-size: 0.84em; font-weight: 600; margin-top: 2px; }
 
-    /* --- 双列行 --- */
-    .dual-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-    .triple-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+    /* 双列 */
+    .dual-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
     /* 链接卡 */
-    .links-card { padding: 20px 22px; }
-    .link-entry {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 9px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.03);
-      font-size: 0.84em;
-      transition: all 0.2s;
-      cursor: pointer;
-    }
-    .link-entry:last-child { border-bottom: none; }
-    .link-entry:hover { padding-left: 6px; }
-    .link-entry:hover .link-name { color: var(--accent); }
-    .link-entry .link-arrow { color: var(--text-dim); font-size: 0.82em; transition: all 0.2s; }
-    .link-entry:hover .link-arrow { color: var(--accent); transform: translateX(3px); }
+    .repo-card { padding: 20px; }
+    .repo-item { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 0.82em; transition: all 0.2s; }
+    .repo-item:last-child { border-bottom: none; }
+    .repo-item:hover { padding-left: 5px; }
+    .repo-item:hover .repo-name { color: var(--accent); }
+    .repo-left { display: flex; align-items: center; gap: 8px; }
+    .repo-name { color: var(--text); font-weight: 500; transition: color 0.2s; }
 
     /* 联系卡 */
-    .contact-card { padding: 22px 24px; display: flex; flex-direction: column; justify-content: center; min-height: 100%; }
-    .contact-card h3 { font-size: 1em; margin-bottom: 6px; }
-    .contact-card p { font-size: 0.82em; color: var(--text-dim); margin-bottom: 14px; line-height: 1.6; }
+    .contact-card { padding: 20px; display: flex; flex-direction: column; justify-content: center; }
+    .contact-card h3 { font-size: 0.95em; margin-bottom: 6px; }
+    .contact-card p { font-size: 0.78em; color: var(--text-dim); margin-bottom: 14px; line-height: 1.6; }
 
     /* Blog卡 */
-    .blog-card { padding: 20px 22px; }
+    .blog-card { padding: 20px; }
     .blog-list { list-style: none; }
-    .blog-list li {
-      padding: 8px 0;
-      font-size: 0.83em;
-      color: var(--text-dim);
-      border-bottom: 1px solid rgba(255,255,255,0.03);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.2s;
-    }
+    .blog-list li { padding: 8px 0; font-size: 0.8em; color: var(--text-dim); border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
     .blog-list li:last-child { border-bottom: none; }
     .blog-list li:hover { padding-left: 5px; color: var(--text); }
     .blog-list li::before { content: '📝'; font-size: 0.8em; }
 
-    /* GitHub仓库卡 */
-    .repo-card { padding: 20px 22px; }
-    .repo-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.03);
-      font-size: 0.84em;
-      transition: all 0.2s;
-    }
-    .repo-item:last-child { border-bottom: none; }
-    .repo-item:hover { padding-left: 6px; }
-    .repo-left { display: flex; align-items: center; gap: 8px; }
-    .repo-left i { color: var(--text-dim); font-size: 1em; }
-    .repo-name { color: var(--text); font-weight: 500; }
-    .repo-desc { font-size: 0.78em; color: var(--text-dim); margin-left: 20px; }
-    .repo-meta { display: flex; gap: 12px; font-size: 0.72em; color: var(--text-dim); }
-    .repo-meta span { display: flex; align-items: center; gap: 3px; }
+    /* 近日动态 */
+    .feed-card { padding: 20px; }
+    .feed-item { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 0.84em; }
+    .feed-item:last-child { border-bottom: none; }
+    .feed-emoji { font-size: 1.1em; flex-shrink: 0; }
+    .feed-date { color: var(--accent); flex-shrink: 0; font-size: 0.78em; min-width: 70px; }
+    .feed-text { color: var(--text); line-height: 1.5; }
 
-    /* ═══ 最右列：图标侧边栏 ═══ */
-    .sidebar-col {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      position: sticky;
-      top: 36px;
-    }
-    .side-icon {
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1em;
-      color: var(--text-dim);
-      border: 1px solid var(--card-border);
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      text-decoration: none;
-      transition: all 0.3s cubic-bezier(.25,.46,.45,.94);
-      cursor: pointer;
-    }
-    .side-icon:hover {
-      color: var(--accent);
-      border-color: var(--accent);
-      background: rgba(240,156,90,0.1);
-      transform: translateY(-3px) scale(1.1);
-      box-shadow: 0 6px 18px rgba(240,156,90,0.15);
-    }
+    /* ===== 灯箱 ===== */
+    .lightbox { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.92); align-items: center; justify-content: center; flex-direction: column; gap: 14px; padding: 20px; }
+    .lightbox.show { display: flex; }
+    .lightbox img { max-width: 90vw; max-height: 78vh; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); object-fit: contain; }
+    .lightbox-caption { color: rgba(255,255,255,0.65); font-size: 0.82em; text-align: center; }
+    .lightbox-close { position: absolute; top: 18px; right: 22px; color: rgba(255,255,255,0.65); font-size: 2em; cursor: pointer; background: none; border: none; transition: color 0.2s; }
+    .lightbox-close:hover { color: #fff; }
+    .lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: #fff; font-size: 1.4em; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+    .lightbox-nav:hover { background: rgba(255,255,255,0.22); }
+    .lightbox-prev { left: 16px; }
+    .lightbox-next { right: 16px; }
 
-    /* ===== 响应式 ===== */
-    @media (max-width: 960px) {
-      .container { grid-template-columns: 1fr; gap: 14px; padding: 24px 18px; }
-      .profile-col { position: static; flex-direction: row; flex-wrap: wrap; align-items: stretch; }
-      .avatar-card { flex: 1; min-width: 260px; }
-      .sidebar-col { position: static; flex-direction: row; justify-content: center; flex-wrap: wrap; }
-      .dual-row, .triple-row { grid-template-columns: 1fr; }
-      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
-      .game-desc-row { grid-template-columns: repeat(3, 1fr); }
-    }
-    @media (max-width: 520px) {
-      .container { padding: 16px 12px; }
-      .profile-col { flex-direction: column; }
-      .profile-avatar-wrap { width: 140px; height: 170px; }
-      .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-      .side-icon { width: 40px; height: 40px; font-size: 1em; }
-      .game-desc-row { grid-template-columns: 1fr 1fr; }
-    }
-
+    /* ===== 滚动条 ===== */
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
+
+    /* ===== 响应式 ===== */
+    @media (max-width: 780px) {
+      .container { grid-template-columns: 1fr; padding: 24px 16px; gap: 16px; }
+      .left-col { position: static; flex-direction: row; flex-wrap: wrap; align-items: start; }
+      .avatar-card { flex: 1; min-width: 220px; }
+      .left-icons { flex: 0 0 auto; flex-direction: row; flex-wrap: wrap; }
+      .left-icon { flex: 0 0 auto; padding: 8px 12px; font-size: 0.78em; }
+      .game-stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .dual-row { grid-template-columns: 1fr; }
+      .game-desc-row { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .container { padding: 16px 12px; }
+      .left-col { flex-direction: column; }
+      .avatar-card { min-width: unset; }
+      .left-icons { flex-direction: column; }
+      .game-stats-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+      .game-desc-row { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+      .stream-btns { flex-direction: column; }
+    }
   </style>
 </head>
 <body>
@@ -572,29 +398,24 @@
 
 <div class="container">
 
-  <!-- ══════ 左列：个人资料 ══════ -->
-  <div class="profile-col">
+  <!-- ═══ 左列 ═══ -->
+  <div class="left-col">
 
     <div class="card avatar-card">
       <div class="profile-label">I'm 🍊</div>
       <h1 class="profile-name">xqaxqa</h1>
-
       <div class="profile-avatar-wrap">
         <img src="images/avatar.jpg" alt="avatar" class="profile-avatar">
       </div>
-
       <p class="profile-subtitle">
         游戏玩家 · AI 探索者<br>
-        无畏契约 / 三角洲行动 ✨<br>
-        <span style="font-size:0.85em;color:var(--text-dim);margin-top:6px;display:inline-block;">欢迎━(*｀∀´*)ノ亻!来到qa的主页</span>
+        无畏契约 / 三角洲行动 ✨
       </p>
-
-      <a href="#about" class="about-link" onclick="document.querySelector('.notice-card').scrollIntoView({behavior:'smooth'});return false;">
+      <a href="#about" class="about-link" onclick="document.querySelector('.contact-card').scrollIntoView({behavior:'smooth'});return false;">
         关于我 <i class="fas fa-arrow-right"></i>
       </a>
     </div>
 
-    <!-- 近日动态（在个人资料下方） -->
     <div class="card feed-card">
       <div class="card-title">
         <i style="color:#f09c5a;" class="fas fa-rss"></i> 近日动态
@@ -602,76 +423,86 @@
       <div id="feedList"></div>
     </div>
 
+    <div class="left-icons">
+      <a href="https://github.com/xqaxqa" target="_blank" class="left-icon">
+        <i class="fab fa-github"></i> GitHub
+      </a>
+      <a href="https://x.com/xqn795540446872" target="_blank" class="left-icon">
+        <i class="fab fa-x-twitter"></i> Twitter / X
+      </a>
+      <a href="https://www.douyin.com/user/MS4wLjABAAAAA-FFzDB6XytbGs1_Ws3s2AimYA3wOFQ_NiIlWUw4qXsKZd7rdArvXMMhMBAa_MGf" target="_blank" class="left-icon">
+        <i class="fab fa-tiktok"></i> 抖音主页
+      </a>
+      <a href="mailto:xqaxqavip@163.com" class="left-icon">
+        <i class="fas fa-envelope"></i> 发送邮件
+      </a>
+      <a href="https://music.163.com/playlist?id=5289106456" target="_blank" class="left-icon">
+        <i class="fas fa-music"></i> 网易云歌单
+      </a>
+    </div>
+
   </div><!-- /左列 -->
 
-  <!-- ══════ 中间：内容区 ══════ -->
-  <div class="content-col">
+  <!-- ═══ 右列 ═══ -->
+  <div class="right-col">
 
-    <!-- 第1行：直播状态 -->
-    <div style="margin-bottom:18px;">
-      <div class="card stream-card">
-        <div class="card-title">
-          <i style="color:var(--live-green);" class="fas fa-broadcast-tower"></i> 直播状态
+    <!-- 直播状态 -->
+    <div class="card stream-card">
+      <div class="card-title">
+        <i style="color:var(--live-green);" class="fas fa-broadcast-tower"></i> 直播状态
+      </div>
+      <div class="stream-status offline" id="streamStatus">
+        <div class="stream-icon-wrap"><i class="fas fa-video"></i></div>
+        <div class="stream-info">
+          <h3>
+            <span id="streamTitle">正在休息中 💤</span>
+            <span class="live-badge off" id="liveBadge">OFFLINE</span>
+          </h3>
+          <p id="streamDesc">主播暂时不在，请稍后再来~</p>
+          <p class="last-stream" id="lastStreamTime">上次开播：2026-06-22 16:00</p>
         </div>
-        <div class="stream-status offline" id="streamStatus">
-          <div class="stream-icon-wrap">
-            <i class="fas fa-video"></i>
-          </div>
-          <div class="stream-info">
-            <h3>
-              <span id="streamTitle">正在休息中 💤</span>
-              <span class="live-badge off" id="liveBadge">OFFLINE</span>
-            </h3>
-            <p id="streamDesc">主播暂时不在，请稍后再来~</p>
-            <p class="last-stream" id="lastStreamTime">上次开播：2026-06-22 16:00</p>
-          </div>
-        </div>
-        <div class="stream-footer">
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <a href="https://live.douyin.com/239837195621" target="_blank" class="card-btn live-btn" id="douyinBtn">
-              <i class="fab fa-tiktok"></i> 抖音直播间 <i class="fas fa-arrow-right"></i>
-            </a>
-            <a href="http://live.bilibili.com/23199566" target="_blank" class="card-btn live-btn" id="bilibiliBtn">
-              <i class="fab fa-bilibili"></i> 哔哩哔哩直播间 <i class="fas fa-arrow-right"></i>
-            </a>
-          </div>
-        </div>
+      </div>
+      <div class="stream-btns">
+        <a href="https://live.douyin.com/239837195621" target="_blank" class="card-btn live-btn" id="douyinBtn">
+          <i class="fab fa-tiktok"></i> 抖音直播间 <i class="fas fa-arrow-right"></i>
+        </a>
+        <a href="http://live.bilibili.com/23199566" target="_blank" class="card-btn live-btn" id="bilibiliBtn">
+          <i class="fab fa-bilibili"></i> 哔哩哔哩直播间 <i class="fas fa-arrow-right"></i>
+        </a>
       </div>
     </div>
 
-    <!-- 第2行：Steam -->
-    <div style="margin-bottom:18px;">
-      <div class="card notice-card">
-        <div class="card-title">
-          <i style="color:var(--accent3);" class="fas fa-gamepad"></i> 最近在玩游戏
+    <!-- Steam 游戏 -->
+    <div class="card notice-card">
+      <div class="card-title">
+        <i style="color:var(--accent3);" class="fas fa-gamepad"></i> 最近在玩游戏
+      </div>
+      <div id="steamStatus">加载中...</div>
+      <div class="game-stats-grid" style="margin-top:14px;">
+        <a href="https://store.steampowered.com/app/730/" target="_blank" class="game-stat-item">
+          <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/capsule_231x87.jpg" alt="CS:GO">
+          <div class="game-stat-info"><span class="game-stat-name">CS:GO</span><span class="game-stat-hours">4900 小时</span></div>
+        </a>
+        <a href="https://store.steampowered.com/app/2507950/" target="_blank" class="game-stat-item">
+          <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2507950/capsule_231x87.jpg" alt="三角洲行动">
+          <div class="game-stat-info"><span class="game-stat-name">三角洲行动</span><span class="game-stat-hours">2000 小时</span></div>
+        </a>
+        <div class="game-stat-item">
+          <img src="https://img2.baidu.com/it/u=3665143965,3664852370&fm=253&fmt=auto&app=138&f=JPEG?w=1000&h=500" alt="无畏契约" style="height:30px;object-fit:cover;border-radius:4px;">
+          <div class="game-stat-info"><span class="game-stat-name">无畏契约</span><span class="game-stat-hours">1800 小时</span></div>
         </div>
-        <div id="steamStatus">加载中...</div>
-        <div class="game-stats-grid" style="margin-top:14px;">
-          <a href="https://store.steampowered.com/app/730/" target="_blank" class="game-stat-item">
-            <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/capsule_231x87.jpg" alt="CS:GO">
-            <div class="game-stat-info"><span class="game-stat-name">CS:GO</span><span class="game-stat-hours">4900 小时</span></div>
-          </a>
-          <a href="https://store.steampowered.com/app/2507950/" target="_blank" class="game-stat-item">
-            <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2507950/capsule_231x87.jpg" alt="三角洲行动">
-            <div class="game-stat-info"><span class="game-stat-name">三角洲行动</span><span class="game-stat-hours">2000 小时</span></div>
-          </a>
-          <div class="game-stat-item">
-            <img src="https://img2.baidu.com/it/u=3665143965,3664852370&fm=253&fmt=auto&app=138&f=JPEG?w=1000&h=500" alt="无畏契约" style="height:30px;object-fit:cover;border-radius:4px;">
-            <div class="game-stat-info"><span class="game-stat-name">无畏契约</span><span class="game-stat-hours">1800 小时</span></div>
-          </div>
-          <a href="https://store.steampowered.com/app/1172470/" target="_blank" class="game-stat-item">
-            <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1172470/capsule_231x87.jpg" alt="Apex Legends">
-            <div class="game-stat-info"><span class="game-stat-name">Apex Legends</span><span class="game-stat-hours">1200 小时</span></div>
-          </a>
-          <a href="https://store.steampowered.com/app/2357570/" target="_blank" class="game-stat-item">
-            <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2357570/capsule_231x87.jpg" alt="守望先锋">
-            <div class="game-stat-info"><span class="game-stat-name">守望先锋</span><span class="game-stat-hours">200 小时</span></div>
-          </a>
-          <a href="https://store.steampowered.com/app/2483190/" target="_blank" class="game-stat-item">
-            <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/744a52b2f79bb03825dea2c0fcfa29e330bb2f1e/header_alt_assets_1.jpg?t=1781815797" alt="地平线6" style="object-fit:cover;border-radius:4px;">
-            <div class="game-stat-info"><span class="game-stat-name">地平线6</span><span class="game-stat-hours">100 小时</span></div>
-          </div>
-        </div>
+        <a href="https://store.steampowered.com/app/1172470/" target="_blank" class="game-stat-item">
+          <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1172470/capsule_231x87.jpg" alt="Apex Legends">
+          <div class="game-stat-info"><span class="game-stat-name">Apex Legends</span><span class="game-stat-hours">1200 小时</span></div>
+        </a>
+        <a href="https://store.steampowered.com/app/2357570/" target="_blank" class="game-stat-item">
+          <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2357570/capsule_231x87.jpg" alt="守望先锋">
+          <div class="game-stat-info"><span class="game-stat-name">守望先锋</span><span class="game-stat-hours">200 小时</span></div>
+        </a>
+        <a href="https://store.steampowered.com/app/2483190/" target="_blank" class="game-stat-item">
+          <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2483190/744a52b2f79bb03825dea2c0fcfa29e330bb2f1e/header_alt_assets_1.jpg?t=1781815797" alt="地平线6" style="object-fit:cover;border-radius:4px;">
+          <div class="game-stat-info"><span class="game-stat-name">地平线6</span><span class="game-stat-hours">100 小时</span></div>
+        </a>
       </div>
     </div>
 
@@ -681,19 +512,19 @@
         <i style="color:#b794f6;" class="fas fa-images"></i> 图片展示
       </div>
       <div class="gallery-grid">
-        <div class="gallery-item" onclick="openLightbox(0)"><img src="images/car_01.jpg" alt="法拉利 F40"><span class="gallery-label">🚗 法拉利 F40</span></div>
-        <div class="gallery-item" onclick="openLightbox(1)"><img src="images/car_02.jpg" alt="法拉利 F40"><span class="gallery-label">🚗 法拉利 F40</span></div>
-        <div class="gallery-item" onclick="openLightbox(2)"><img src="images/car_03.jpg" alt="阿斯顿·马丁 Valkyrie"><span class="gallery-label">🏎️ Valkyrie 夜间</span></div>
-        <div class="gallery-item" onclick="openLightbox(3)"><img src="images/car_04.jpg" alt="阿斯顿·马丁 Valkyrie"><span class="gallery-label">🏎️ Valkyrie 暗调</span></div>
-        <div class="gallery-item" onclick="openLightbox(4)"><img src="images/car_05.jpg" alt="阿斯顿·马丁 Valkyrie"><span class="gallery-label">🏎️ Valkyrie 黄昏</span></div>
-        <div class="gallery-item" onclick="openLightbox(5)"><img src="images/car_06.jpg" alt="阿斯顿·马丁 Valkyrie"><span class="gallery-label">🏎️ Valkyrie 雨滴</span></div>
-        <div class="gallery-item" onclick="openLightbox(6)"><img src="images/car_07.jpg" alt="阿斯顿·马丁 Valkyrie"><span class="gallery-label">🏎️ Valkyrie 赛道</span></div>
-        <div class="gallery-item" onclick="openLightbox(7)"><img src="images/car_08.jpg" alt="Zenvo ST1"><span class="gallery-label">⚡ Zenvo ST1</span></div>
-        <div class="gallery-item" onclick="openLightbox(8)"><img src="images/car_09.jpg" alt="Zenvo ST1"><span class="gallery-label">⚡ Zenvo ST1</span></div>
+        <div class="gallery-item" onclick="openLightbox(0)"><img src="images/car_01.jpg" alt=""><span class="gallery-label">🚗 法拉利 F40</span></div>
+        <div class="gallery-item" onclick="openLightbox(1)"><img src="images/car_02.jpg" alt=""><span class="gallery-label">🚗 法拉利 F40</span></div>
+        <div class="gallery-item" onclick="openLightbox(2)"><img src="images/car_03.jpg" alt=""><span class="gallery-label">🏎️ Valkyrie</span></div>
+        <div class="gallery-item" onclick="openLightbox(3)"><img src="images/car_04.jpg" alt=""><span class="gallery-label">🏎️ Valkyrie</span></div>
+        <div class="gallery-item" onclick="openLightbox(4)"><img src="images/car_05.jpg" alt=""><span class="gallery-label">🏎️ Valkyrie</span></div>
+        <div class="gallery-item" onclick="openLightbox(5)"><img src="images/car_06.jpg" alt=""><span class="gallery-label">🏎️ Valkyrie</span></div>
+        <div class="gallery-item" onclick="openLightbox(6)"><img src="images/car_07.jpg" alt=""><span class="gallery-label">🏎️ Valkyrie</span></div>
+        <div class="gallery-item" onclick="openLightbox(7)"><img src="images/car_08.jpg" alt=""><span class="gallery-label">⚡ Zenvo ST1</span></div>
+        <div class="gallery-item" onclick="openLightbox(8)"><img src="images/car_09.jpg" alt=""><span class="gallery-label">⚡ Zenvo ST1</span></div>
       </div>
     </div>
 
-    <!-- 游戏 & 技能（全宽） -->
+    <!-- 游戏 & 技能 -->
     <div class="card games-card">
       <div class="card-title">
         <i style="color:#ff6b6b;" class="fas fa-gamepad"></i> 游戏 & 技能
@@ -727,10 +558,8 @@
       </div>
     </div>
 
-    <!-- 第2行：GitHub仓库 + 联系我 -->
+    <!-- 双列：链接 + 联系 -->
     <div class="dual-row">
-
-      <!-- 友情链接 -->
       <div class="card repo-card">
         <div class="card-title">
           <i style="color:#b794f6;" class="fas fa-link"></i> 友情链接
@@ -740,14 +569,14 @@
             <i class="fas fa-music" style="color:#e60026;"></i>
             <span class="repo-name">我的网易云</span>
           </div>
-          <a href="https://music.163.com/playlist?id=5289106456&uct2=U2FsdGVkX1+BRvEiuorOAkgVrWcLpyD8aetHL9y5HdA=" target="_blank" class="card-btn" style="padding:4px 10px;font-size:0.72em;">直达 <i class="fas fa-external-link-alt"></i></a>
+          <a href="https://music.163.com/playlist?id=5289106456" target="_blank" class="card-btn" style="padding:4px 10px;font-size:0.72em;">直达 <i class="fas fa-external-link-alt"></i></a>
         </div>
         <div class="repo-item">
           <div class="repo-left">
             <i class="fab fa-tiktok" style="color:#fe2c55;"></i>
             <span class="repo-name">抖音主页</span>
           </div>
-          <a href="https://www.douyin.com/user/MS4wLjABAAAAA-FFzDB6XytbGs1_Ws3s2AimYA3wOFQ_NiIlWUw4qXsKZd7rdArvXMMhMBAa_MGf?from_tab_name=live" target="_blank" class="card-btn" style="padding:4px 10px;font-size:0.72em;">直达 <i class="fas fa-external-link-alt"></i></a>
+          <a href="https://www.douyin.com/user/MS4wLjABAAAAA-FFzDB6XytbGs1_Ws3s2AimYA3wOFQ_NiIlWUw4qXsKZd7rdArvXMMhMBAa_MGf" target="_blank" class="card-btn" style="padding:4px 10px;font-size:0.72em;">直达 <i class="fas fa-external-link-alt"></i></a>
         </div>
         <div class="repo-item">
           <div class="repo-left">
@@ -757,19 +586,14 @@
           <a href="https://x.com/xqn795540446872" target="_blank" class="card-btn" style="padding:4px 10px;font-size:0.72em;">直达 <i class="fas fa-external-link-alt"></i></a>
         </div>
       </div>
-
-      <!-- 联系我 -->
       <div class="card contact-card" id="contact">
         <h3>📬 Get In Touch</h3>
         <p>很高兴认识你！<br>欢迎通过以下方式联系 ✨</p>
-        <a href="mailto:xqaxqavip@163.com" class="card-btn">
-          发送邮件 <i class="fas fa-arrow-right"></i>
-        </a>
+        <a href="mailto:xqaxqavip@163.com" class="card-btn">发送邮件 <i class="fas fa-arrow-right"></i></a>
       </div>
+    </div>
 
-    </div><!-- /第2行 -->
-
-    <!-- Blog（全宽） -->
+    <!-- Blog -->
     <div class="card blog-card">
       <div class="card-title">
         <i style="color:#74c0fc;" class="fas fa-book-open"></i> Blog & 笔记
@@ -780,57 +604,32 @@
         <li>🖥️ 软路由做旁路由 · FTTR 实操指南</li>
       </ul>
       <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;">
-        <a href="#" class="card-btn" onclick="showBlogDetail('val')"><i class="fas fa-crosshairs"></i> 准心</a>
-        <a href="#" class="card-btn" onclick="showBlogDetail('gun')"><i class="fas fa-gun"></i> 改枪码</a>
-        <a href="#" class="card-btn" onclick="showBlogDetail('router')"><i class="fas fa-wifi"></i> 旁路由</a>
+        <a href="#" class="card-btn" onclick="return showBlogDetail('val')"><i class="fas fa-crosshairs"></i> 准心</a>
+        <a href="#" class="card-btn" onclick="return showBlogDetail('gun')"><i class="fas fa-gun"></i> 改枪码</a>
+        <a href="#" class="card-btn" onclick="return showBlogDetail('router')"><i class="fas fa-wifi"></i> 旁路由</a>
       </div>
     </div>
 
-  </div><!-- /中间内容区 -->
+  </div><!-- /右列 -->
 
-  <!-- ══════ 最右列：图标侧边栏 ══════ -->
-  <div class="sidebar-col">
-    <a href="https://github.com/xqaxqa" target="_blank" class="side-icon" title="GitHub">
-      <i class="fab fa-github"></i>
-    </a>
-    <a href="http://live.bilibili.com/23199566" target="_blank" class="side-icon" id="sideStreamBtn" title="B站直播">
-      <i class="fas fa-broadcast-tower"></i>
-    </a>
-    <a href="mailto:xqaxqavip@163.com" class="side-icon" title="Email">
-      <i class="fas fa-envelope"></i>
-    </a>
-    <a href="https://www.douyin.com/user/MS4wLjABAAAAA-FFzDB6XytbGs1_Ws3s2AimYA3wOFQ_NiIlWUw4qXsKZd7rdArvXMMhMBAa_MGf?from_tab_name=live" target="_blank" class="side-icon" title="抖音">
-      <i class="fab fa-tiktok"></i>
-    </a>
-    <a href="https://x.com/xqn795540446872" target="_blank" class="side-icon" title="Twitter/X">
-      <i class="fab fa-x-twitter"></i>
-    </a>
-  </div>
+</div><!-- /container -->
 
-</div>
-
-<!-- 星空 + 直播状态脚本 -->
+<!-- ═══ 脚本 ═══ -->
 <script>
-  // ========== Canvas 粒子流引擎（轻量级） ==========
+  // 粒子流
   (function() {
     const canvas = document.getElementById('starsCanvas');
     const ctx = canvas.getContext('2d');
-    let W, H;
-    const COUNT = 1000;
-    const particles = [];
+    let W, H, particles = [];
+    const COUNT = 800;
 
-    function resize() {
-      W = canvas.width = window.innerWidth;
-      H = canvas.height = window.innerHeight;
-    }
+    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
     resize();
     window.addEventListener('resize', resize);
 
-    // 初始化粒子
     for (let i = 0; i < COUNT; i++) {
       particles.push({
-        x: Math.random() * W,
-        y: Math.random() * H,
+        x: Math.random() * W, y: Math.random() * H,
         r: Math.random() * 1.2 + 0.3,
         vx: (Math.random() - 0.5) * 0.3,
         vy: Math.random() * 0.15 + 0.05,
@@ -843,15 +642,11 @@
       ctx.clearRect(0, 0, W, H);
       for (let i = 0; i < COUNT; i++) {
         const p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.a += p.da;
+        p.x += p.vx; p.y += p.vy; p.a += p.da;
         if (p.a > 0.7 || p.a < 0.1) p.da = -p.da;
-        // 边界循环
         if (p.y > H + 5) { p.y = -5; p.x = Math.random() * W; }
         if (p.x < -5) p.x = W + 5;
         if (p.x > W + 5) p.x = -5;
-        // 绘制（用 fillRect 比 arc 快很多）
         ctx.globalAlpha = p.a;
         ctx.fillStyle = '#fff';
         ctx.fillRect(p.x, p.y, p.r, p.r);
@@ -862,45 +657,38 @@
     draw();
   })();
 
-  // ========== Steam 游戏状态（读取本地 JSON，无跨域） ==========
+  // Steam
   (function() {
     const el = document.getElementById('steamStatus');
     if (!el) return;
-
     async function fetchSteam() {
       try {
         const res = await fetch('./steam.json?_t=' + Date.now());
         const data = await res.json();
-
         if (data.status === 'in-game' && data.gameName) {
           el.innerHTML = '<div style="display:flex;align-items:center;gap:12px;">' +
-            (data.gameIcon ? '<img src="' + data.gameIcon + '" style="width:48px;height:48px;border-radius:8px;object-fit:cover;" alt="game">' :
-            '<div style="width:48px;height:48px;border-radius:8px;background:var(--card-bg);display:flex;align-items:center;justify-content:center;font-size:1.4em;">🎮</div>') +
+            (data.gameIcon ? '<img src="' + data.gameIcon + '" style="width:44px;height:44px;border-radius:8px;object-fit:cover;" alt="">' :
+            '<div style="width:44px;height:44px;border-radius:8px;background:var(--card-bg);display:flex;align-items:center;justify-content:center;font-size:1.3em;">🎮</div>') +
             '<div><p style="margin:0;font-weight:600;color:#4ade80;">🟢 正在玩 ' + data.gameName + '</p></div></div>';
           return;
         }
-
-        // 离线 — 显示最近常玩
         const games = data.recentGames || [];
         if (games.length === 0) {
-          el.innerHTML = '<p style="margin:0;"><i class="fas fa-moon" style="color:#6b7280;margin-right:6px;"></i>当前离线 🌙</p>';
+          el.innerHTML = '<p style="margin:0;color:var(--text-dim);"><i class="fas fa-moon" style="color:#6b7280;margin-right:5px;"></i>当前离线 🌙</p>';
           return;
         }
-        let html = '<p style="margin:0 0 10px;color:var(--text-dim);font-size:0.85em;"><i class="fas fa-moon" style="color:#6b7280;margin-right:4px;"></i>当前离线 · 最近在玩：</p>';
+        let html = '<p style="margin:0 0 8px;color:var(--text-dim);font-size:0.83em;"><i class="fas fa-moon" style="color:#6b7280;margin-right:4px;"></i>离线中 · 最近在玩：</p>';
         games.forEach(function(g) {
           html += '<div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);">' +
-            (g.icon ? '<img src="' + g.icon + '" style="width:32px;height:32px;border-radius:6px;object-fit:cover;">' :
-            '<div style="width:32px;height:32px;border-radius:6px;background:var(--card-bg);display:flex;align-items:center;justify-content:center;">🎮</div>') +
-            '<div style="flex:1;"><p style="margin:0;font-size:0.88em;color:var(--text);">' + g.name + '</p>' +
-            (g.hours ? '<p style="margin:2px 0 0;font-size:0.78em;color:var(--text-dim);">⏱ ' + g.hours + ' 小时</p>' : '') +
-            '</div>' +
-            (g.link ? '<a href="' + g.link + '" target="_blank" class="card-btn" style="padding:3px 8px;font-size:0.7em;">查看</a>' : '') +
-            '</div>';
+            (g.icon ? '<img src="' + g.icon + '" style="width:30px;height:30px;border-radius:6px;object-fit:cover;">' :
+            '<div style="width:30px;height:30px;border-radius:6px;background:var(--card-bg);display:flex;align-items:center;justify-content:center;">🎮</div>') +
+            '<div style="flex:1;overflow:hidden;"><p style="margin:0;font-size:0.84em;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + g.name + '</p>' +
+            (g.hours ? '<p style="margin:2px 0 0;font-size:0.75em;color:var(--text-dim);">⏱ ' + g.hours + ' 小时</p>' : '') + '</div>' +
+            (g.link ? '<a href="' + g.link + '" target="_blank" class="card-btn" style="padding:3px 8px;font-size:0.7em;">查看</a>' : '') + '</div>';
         });
         el.innerHTML = html;
       } catch(err) {
-        console.log('Steam数据加载失败:', err);
-        el.innerHTML = '<p style="margin:0;color:var(--text-dim);"><i class="fas fa-exclamation-circle" style="color:#f59e0b;margin-right:6px;"></i>加载失败</p>';
+        el.innerHTML = '<p style="margin:0;color:var(--text-dim);"><i class="fas fa-exclamation-circle" style="color:#f59e0b;margin-right:5px;"></i>加载失败</p>';
       }
     }
     fetchSteam();
@@ -913,41 +701,25 @@
       const res = await fetch('./feed.json?_t=' + Date.now());
       const feed = await res.json();
       const el = document.getElementById('feedList');
-      el.innerHTML = feed.slice().reverse().map(item => `
-        <div class="feed-item">
-          <span class="feed-emoji">${item.emoji || '📝'}</span>
-          <span class="feed-date">${item.date}</span>
-          <span class="feed-text">${item.text}</span>
-        </div>
-      `).join('');
+      el.innerHTML = feed.slice().reverse().map(item =>
+        '<div class="feed-item"><span class="feed-emoji">' + (item.emoji||'📝') + '</span><span class="feed-date">' + item.date + '</span><span class="feed-text">' + item.text + '</span></div>'
+      ).join('');
     } catch(e) {
-      document.getElementById('feedList').innerHTML = '<p style="color:var(--text-dim)">暂无动态</p>';
+      document.getElementById('feedList').innerHTML = '<p style="color:var(--text-dim);font-size:0.8em;">暂无动态</p>';
     }
   })();
 
-  // ========== 直播状态联动 ==========
-  // ⚠️ 请修改下面的配置为你的真实信息
-
+  // 直播状态
   const STREAM_CONFIG = {
-    // 主平台
     platform: 'bilibili',
-
-    // B站房间号
     roomId: '23199566',
-
-    // 抖音直播间ID（备用）
     douyinRoomId: '239837195621',
-
-    // 上次开播时间（手动更新）
     lastStreamTime: '2026-06-22 16:00',
-
-    // 直播间链接
     bilibiliUrl: 'http://live.bilibili.com/23199566',
     douyinUrl: 'https://live.douyin.com/239837195621',
     streamUrl: 'http://live.bilibili.com/23199566',
   };
 
-  // 更新UI的函数
   function updateStreamUI(isLive) {
     const statusEl = document.getElementById('streamStatus');
     const titleEl = document.getElementById('streamTitle');
@@ -956,7 +728,6 @@
     const lastEl = document.getElementById('lastStreamTime');
     const douyinBtn = document.getElementById('douyinBtn');
     const bilibiliBtn = document.getElementById('bilibiliBtn');
-    const sideBtn = document.getElementById('sideStreamBtn');
 
     if (isLive) {
       statusEl.className = 'stream-status live';
@@ -964,99 +735,57 @@
       descEl.textContent = '快来直播间一起玩吧~';
       badgeEl.className = 'live-badge on';
       badgeEl.textContent = 'LIVE';
-      // 两个按钮都高亮
-      [douyinBtn, bilibiliBtn].forEach(b => {
+      [douyinBtn, bilibiliBtn].forEach(function(b) {
         b.classList.add('live-btn');
         b.style.borderColor = 'var(--live-green)';
         b.style.color = 'var(--live-green)';
         b.style.background = 'rgba(74,222,128,0.06)';
       });
-      sideBtn.style.color = 'var(--live-green)';
-      sideBtn.style.borderColor = 'var(--live-green)';
     } else {
       statusEl.className = 'stream-status offline';
       titleEl.textContent = '正在休息中 💤';
       descEl.textContent = '主播暂时不在，请稍后再来~';
       badgeEl.className = 'live-badge off';
       badgeEl.textContent = 'OFFLINE';
-      // 两个按钮恢复默认
-      [douyinBtn, bilibiliBtn].forEach(b => {
+      [douyinBtn, bilibiliBtn].forEach(function(b) {
         b.classList.remove('live-btn');
         b.style.borderColor = '';
         b.style.color = '';
         b.style.background = '';
       });
-      sideBtn.style.color = '';
-      sideBtn.style.borderColor = '';
     }
-    lastEl.textContent = `上次开播：${STREAM_CONFIG.lastStreamTime}`;
+    lastEl.textContent = '上次开播：' + STREAM_CONFIG.lastStreamTime;
   }
 
-  // 检测开播状态（通过各平台API）
   async function checkStreamStatus() {
-    const { platform, roomId } = STREAM_CONFIG;
-
-    if (!roomId) {
-      // 未配置时默认显示离线
-      updateStreamUI(false);
-      return;
-    }
-
+    const roomId = STREAM_CONFIG.roomId;
+    if (!roomId) { updateStreamUI(false); return; }
     try {
-      let isLive = false;
-
-      if (platform === 'bilibili') {
-        // B站直播API（优先检测B站）
-        try {
-          const roomRes = await fetch(`https://api.bilibili.com/x/live/web-room/v1/index/getRoomInfo?room_id=${roomId}`);
-          const roomData = await roomRes.json();
-          isLive = roomData?.data?.live_status === 1;
-        } catch(e) { console.log('B站检测失败'); }
-      } else if (platform === 'douyin') {
-        // 斗鱼API
-        const res = await fetch(`https://www.douyutv.com/api/v1/room/${roomId}`);
-        const data = await res.json();
-        isLive = data?.data?.show_status === 1 || data?.data?.show_status === 2 || data?.data?.online > 0;
-      } else if (platform === 'douyin') {
-        // 抖音直播检测（通过页面抓取）
-        try {
-          const res = await fetch(STREAM_CONFIG.douyinUrl, { mode: 'no-cors' });
-          // no-cors 无法读取状态，默认离线
-          isLive = false;
-        } catch(e) { console.log('抖音检测失败:', e); }
-      } else if (platform === 'huya') {
-        // 虎牙API
-        const res = await fetch(`https://www.huya.com/cache.php?m=Live&do=getRoomInfo&roomId=${roomId}`);
-        const data = await res.json();
-        isLive = data?.data?.liveStatus === 1;
+      if (STREAM_CONFIG.platform === 'bilibili') {
+        const roomRes = await fetch('https://api.bilibili.com/x/live/web-room/v1/index/getRoomInfo?room_id=' + roomId);
+        const roomData = await roomRes.json();
+        updateStreamUI(roomData?.data?.live_status === 1);
+        return;
       }
-
-      updateStreamUI(isLive);
-    } catch (err) {
-      console.log('直播状态检测失败:', err);
-      updateStreamUI(false);
-    }
+    } catch(e) {}
+    updateStreamUI(false);
   }
-
-  // 页面加载时检测
   checkStreamStatus();
-
-  // 每60秒自动刷新一次
   setInterval(checkStreamStatus, 60000);
 
-  // ===== 图片灯箱 =====
-  const galleryImages = [
+  // 灯箱
+  var galleryImages = [
     { src: 'images/car_01.jpg', label: '🚗 法拉利 F40 — 侧面动态' },
     { src: 'images/car_02.jpg', label: '🚗 法拉利 F40 — 正面山雾' },
-    { src: 'images/car_03.jpg', label: '🏎️ Aston Martin Valkyrie — 夜间正面' },
-    { src: 'images/car_04.jpg', label: '🏎️ Aston Martin Valkyrie — 夜间侧面' },
-    { src: 'images/car_05.jpg', label: '🏎️ Aston Martin Valkyrie — 黄昏' },
-    { src: 'images/car_06.jpg', label: '🏎️ Aston Martin Valkyrie — 雨滴细节' },
-    { src: 'images/car_07.jpg', label: '🏎️ Aston Martin Valkyrie — 赛道全景' },
+    { src: 'images/car_03.jpg', label: '🏎️ Aston Martin Valkyrie — 夜间' },
+    { src: 'images/car_04.jpg', label: '🏎️ Valkyrie — 夜间侧面' },
+    { src: 'images/car_05.jpg', label: '🏎️ Valkyrie — 黄昏' },
+    { src: 'images/car_06.jpg', label: '🏎️ Valkyrie — 雨滴细节' },
+    { src: 'images/car_07.jpg', label: '🏎️ Valkyrie — 赛道全景' },
     { src: 'images/car_08.jpg', label: '⚡ Zenvo ST1 — 星空山路' },
     { src: 'images/car_09.jpg', label: '⚡ Zenvo ST1 — 尾部视角' }
   ];
-  let currentIdx = 0;
+  var currentIdx = 0;
 
   function openLightbox(idx) {
     currentIdx = idx;
@@ -1064,28 +793,23 @@
     document.getElementById('lightbox').classList.add('show');
     document.body.style.overflow = 'hidden';
   }
-
   function closeLightbox() {
     document.getElementById('lightbox').classList.remove('show');
     document.body.style.overflow = '';
   }
-
   function showLightbox(idx) {
-    const item = galleryImages[idx];
+    var item = galleryImages[idx];
     document.getElementById('lbImg').src = item.src;
     document.getElementById('lbCaption').textContent = item.label;
   }
-
   function lbPrev() {
     currentIdx = (currentIdx - 1 + galleryImages.length) % galleryImages.length;
     showLightbox(currentIdx);
   }
-
   function lbNext() {
     currentIdx = (currentIdx + 1) % galleryImages.length;
     showLightbox(currentIdx);
   }
-
   document.addEventListener('keydown', function(e) {
     if (!document.getElementById('lightbox').classList.contains('show')) return;
     if (e.key === 'Escape') closeLightbox();
@@ -1093,8 +817,8 @@
     if (e.key === 'ArrowRight') lbNext();
   });
 
-  // ===== Blog 详情弹窗 =====
-  const blogData = {
+  // Blog弹窗
+  var blogData = {
     val: {
       title: '🎯 瓦罗兰特准心参数',
       lines: [
@@ -1135,10 +859,10 @@
   };
 
   function showBlogDetail(key) {
-    const d = blogData[key];
+    var d = blogData[key];
     document.getElementById('blogModalTitle').innerHTML = '<i class="fas fa-book-open"></i> ' + d.title;
-    document.getElementById('blogModalContent').innerHTML = d.lines.map(l => {
-      if (l.includes('：')) {
+    document.getElementById('blogModalContent').innerHTML = d.lines.map(function(l) {
+      if (l.indexOf('：') > -1) {
         return '<div style="margin:10px 0 4px;font-weight:600;color:var(--accent);font-size:0.82em;">' + l + '</div>';
       }
       return '<div style="font-size:0.82em;line-height:1.7;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.04);word-break:break-all;">' + l + '</div>';
@@ -1147,18 +871,16 @@
     document.body.style.overflow = 'hidden';
     return false;
   }
-
   function closeBlogModal() {
     document.getElementById('blogModal').classList.remove('show');
     document.body.style.overflow = '';
   }
-
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeBlogModal();
   });
 </script>
 
-<!-- 灯箱弹窗HTML -->
+<!-- 灯箱HTML -->
 <div class="lightbox" id="lightbox" onclick="if(event.target===this)closeLightbox()">
   <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
   <button class="lightbox-nav lightbox-prev" onclick="lbPrev()"><i class="fas fa-chevron-left"></i></button>
@@ -1167,28 +889,28 @@
   <div class="lightbox-caption" id="lbCaption"></div>
 </div>
 
-<!-- Blog详情弹窗 -->
+<!-- Blog弹窗 -->
 <div class="lightbox" id="blogModal" onclick="if(event.target===this)closeBlogModal()">
   <button class="lightbox-close" onclick="closeBlogModal()">&times;</button>
-  <div style="background:var(--card-bg);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:32px;max-width:560px;width:90vw;max-height:75vh;overflow-y:auto;position:relative;">
-    <h2 id="blogModalTitle" style="font-size:1.05em;margin-bottom:20px;display:flex;align-items:center;gap:10px;"></h2>
+  <div style="background:var(--card-bg);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:30px;max-width:560px;width:90vw;max-height:72vh;overflow-y:auto;position:relative;">
+    <h2 id="blogModalTitle" style="font-size:1em;margin-bottom:18px;display:flex;align-items:center;gap:10px;"></h2>
     <div id="blogModalContent"></div>
   </div>
 </div>
 
-</body>
-
 <!-- 进站公告弹窗 -->
 <div id="welcomeModal" style="position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);animation:fadeIn .3s ease">
-  <div style="background:var(--card-bg,#12162192);border:1px solid var(--card-border,#fff7);border-radius:16px;padding:36px 40px;max-width:420px;width:90%;text-align:center;animation:scaleIn .35s cubic-bezier(.34,1.56,.64,1);box-shadow:0 20px 60px rgba(0,0,0,0.5)">
+  <div style="background:rgba(18,22,33,0.96);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:36px 40px;max-width:420px;width:90%;text-align:center;animation:scaleIn .35s cubic-bezier(.34,1.56,.64,1);box-shadow:0 20px 60px rgba(0,0,0,0.5)">
     <div style="font-size:48px;margin-bottom:16px">📢</div>
-    <h2 style="color:var(--text,#c8d1e0);font-size:20px;margin-bottom:12px;font-weight:600">欢迎━(*｀∀´*)ノ亻!来到qa的主页</h2>
-    <p style="color:var(--text-dim,#5e6d82);font-size:14px;margin-bottom:24px;line-height:1.6">这里是qa的小天地，欢迎探索~ ✨</p>
-    <button onclick="document.getElementById('welcomeModal').remove()" style="background:linear-gradient(135deg,var(--accent,#f09c5a),var(--accent2,#83cbac));color:#0a0e17;border:none;padding:10px 36px;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;transition:transform .2s,box-shadow .2s" onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 4px 20px rgba(240,156,90,0.4)'" onmouseout="this.style.transform='';this.style.boxShadow=''">我知道了</button>
+    <h2 style="color:#c8d1e0;font-size:20px;margin-bottom:12px;font-weight:600">欢迎━(*｀∀´*)ノ亻!来到qa的主页</h2>
+    <p style="color:#5e6d82;font-size:14px;margin-bottom:24px;line-height:1.6">这里是qa的小天地，欢迎探索~ ✨</p>
+    <button onclick="document.getElementById('welcomeModal').remove()" style="background:linear-gradient(135deg,#f09c5a,#83cbac);color:#0a0e17;border:none;padding:10px 36px;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;transition:transform .2s,box-shadow .2s" onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 4px 20px rgba(240,156,90,0.4)'" onmouseout="this.style.transform='';this.style.boxShadow=''">我知道了</button>
   </div>
 </div>
 <style>
   @keyframes fadeIn{from{opacity:0}to{opacity:1}}
   @keyframes scaleIn{from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)}}
 </style>
+
+</body>
 </html>
