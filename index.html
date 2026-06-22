@@ -30,46 +30,10 @@
       position: relative;
     }
 
-    /* ===== 动态星空背景 ===== */
-    #stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-    .star {
-      position: absolute;
-      background: #fff;
-      border-radius: 50%;
-      animation: twinkle var(--dur) ease-in-out infinite alternate;
-      will-change: transform, opacity;
-    }
-    @keyframes twinkle {
-      0% { opacity: 0.08; transform: scale(0.6); }
-      100% { opacity: 0.9; transform: scale(1.2); }
-    }
-    /* 流星 */
-    .shooting-star {
-      position: absolute;
-      width: 120px; height: 1px;
-      background: linear-gradient(90deg, rgba(255,255,255,0.85), transparent);
-      border-radius: 1px;
-      animation: shoot linear forwards;
-      opacity: 0;
-    }
-    @keyframes shoot {
-      0% { transform: translateX(0) translateY(0); opacity: 0; }
-      5% { opacity: 1; }
-      70% { opacity: 0.8; }
-      100% { transform: translateX(300px) translateY(180px); opacity: 0; }
-    }
-    /* 星云层 */
-    #nebula {
-      position: fixed; inset: 0; z-index: -1;
-      background:
-        radial-gradient(ellipse 80% 60% at 20% 30%, rgba(99,66,168,0.06), transparent),
-        radial-gradient(ellipse 60% 40% at 75% 65%, rgba(240,156,90,0.04), transparent),
-        radial-gradient(ellipse 50% 30% at 50% 80%, rgba(131,203,172,0.03), transparent);
-      animation: nebulaDrift 20s ease-in-out infinite alternate;
-    }
-    @keyframes nebulaDrift {
-      0% { filter: hue-rotate(0deg); }
-      100% { filter: hue-rotate(15deg); }
+    /* ===== Canvas 粒子流 ===== */
+    #starsCanvas {
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none;
     }
 
     /* ===== 主容器 ===== */
@@ -592,8 +556,7 @@
 </head>
 <body>
 
-<div id="nebula"></div>
-<div id="stars"></div>
+<canvas id="starsCanvas"></canvas>
 
 <div class="container">
 
@@ -797,62 +760,56 @@
 
 <!-- 星空 + 直播状态脚本 -->
 <script>
-  // ========== 动态星空引擎 ==========
-  const starsContainer = document.getElementById('stars');
-  let mouseX = 0, mouseY = 0;
-  let targetX = 0, targetY = 0;
+  // ========== Canvas 粒子流引擎（轻量级） ==========
+  (function() {
+    const canvas = document.getElementById('starsCanvas');
+    const ctx = canvas.getContext('2d');
+    let W, H;
+    const COUNT = 180;
+    const particles = [];
 
-  // 创建星星（分层）
-  function createStars() {
-    for (let i = 0; i < 150; i++) {
-      const s = document.createElement('div');
-      const layer = Math.random();
-      const size = layer > 0.7 ? Math.random() * 2 + 1.2 : (layer > 0.3 ? Math.random() * 1.5 + 0.6 : Math.random() * 1 + 0.3);
-      const speed = layer > 0.7 ? 8 : (layer > 0.3 ? 15 : 25);
-      s.className = 'star';
-      s.dataset.speed = speed;
-      s.style.cssText = `
-        left:${Math.random()*100}%;top:${Math.random()*100}%;
-        width:${size}px;height:${size}px;
-        animation-duration:${Math.random()*3+1.5}s;
-        animation-delay:${Math.random()*5}s;
-        opacity:${layer > 0.7 ? 0.9 : (layer > 0.3 ? 0.5 : 0.25)};
-      `;
-      starsContainer.appendChild(s);
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
     }
-  }
-  createStars();
+    resize();
+    window.addEventListener('resize', resize);
 
-  // 鼠标视差跟随
-  document.addEventListener('mousemove', e => {
-    targetX = (e.clientX / window.innerWidth - 0.5) * 30;
-    targetY = (e.clientY / window.innerHeight - 0.5) * 20;
-  });
+    // 初始化粒子
+    for (let i = 0; i < COUNT; i++) {
+      particles.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 1.2 + 0.3,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: Math.random() * 0.15 + 0.05,
+        a: Math.random() * 0.5 + 0.15,
+        da: (Math.random() - 0.5) * 0.008
+      });
+    }
 
-  function animateStars() {
-    mouseX += (targetX - mouseX) * 0.05;
-    mouseY += (targetY - mouseY) * 0.05;
-    starsContainer.querySelectorAll('.star').forEach(star => {
-      const sp = parseFloat(star.dataset.speed) || 15;
-      star.style.transform = `translate(${mouseX / sp}px, ${mouseY / sp}px)`;
-    });
-    requestAnimationFrame(animateStars);
-  }
-  animateStars();
-
-  // 随机流星
-  function createShootingStar() {
-    const ss = document.createElement('div');
-    ss.className = 'shooting-star';
-    ss.style.left = Math.random() * 70 + '%';
-    ss.style.top = Math.random() * 40 + '%';
-    ss.style.transform = 'rotate(' + (Math.random() * 20 + 25) + 'deg)';
-    ss.style.animationDuration = (Math.random() * 0.8 + 0.6) + 's';
-    starsContainer.appendChild(ss);
-    setTimeout(() => ss.remove(), 2000);
-  }
-  setInterval(() => { if (Math.random() > 0.65) createShootingStar(); }, 2500);
-  setTimeout(createShootingStar, 1500);
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      for (let i = 0; i < COUNT; i++) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.a += p.da;
+        if (p.a > 0.7 || p.a < 0.1) p.da = -p.da;
+        // 边界循环
+        if (p.y > H + 5) { p.y = -5; p.x = Math.random() * W; }
+        if (p.x < -5) p.x = W + 5;
+        if (p.x > W + 5) p.x = -5;
+        // 绘制（用 fillRect 比 arc 快很多）
+        ctx.globalAlpha = p.a;
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(p.x, p.y, p.r, p.r);
+      }
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
 
   // ========== 直播状态联动 ==========
   // ⚠️ 请修改下面的配置为你的真实信息
