@@ -1,0 +1,82 @@
+name: Bilibili Live Status
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'  # 每15分钟运行一次
+  workflow_dispatch:  # 允许手动触发
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Fetch Bilibili Live Status
+        run: |
+          ROOM_ID="23199566"
+          API_URL="https://api.live.bilibili.com/xlive/web-room/v1/index/getInfoByRoom?room_id=${ROOM_ID}"
+          
+          # 获取直播状态
+          RESPONSE=$(curl -s "$API_URL")
+          IS_LIVE=$(echo "$RESPONSE" | grep -oP '"live_status":\s*\K[0-9]' || echo "0")
+          TITLE=$(echo "$RESPONSE" | grep -oP '"title":\s*"\K[^"]+' || echo "")
+          UNAME=$(echo "$RESPONSE" | grep -oP '"uname":\s*"\K[^"]+' || echo "逆取")
+          ONLINE=$(echo "$RESPONSE" | grep -oP '"online":\s*\K[0-9]+' || echo "0")
+          COVER=$(echo "$RESPONSE" | grep -oP '"system_cover":\s*"\K[^"]+' || echo "")
+          
+          # 读取当前 bilibili.json
+          CURRENT_JSON=$(cat bilibili.json)
+          CURRENT_IS_LIVE=$(echo "$CURRENT_JSON" | grep -oP '"isLive":\s*\K(true|false)' || echo "false")
+          
+          # 转换 boolean
+          if [ "$IS_LIVE" = "1" ]; then
+            IS_LIVE_BOOL="true"
+          else
+            IS_LIVE_BOOL="false"
+          fi
+          
+          # 检测状态变化，记录时间戳
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          STREAM_START=""
+          STREAM_END=""
+          
+          if [ "$IS_LIVE_BOOL" = "true" ] && [ "$CURRENT_IS_LIVE" = "false" ]; then
+            # 刚开播
+            STREAM_START="$TIMESTAMP"
+            STREAM_END=""
+          elif [ "$IS_LIVE_BOOL" = "false" ] && [ "$CURRENT_IS_LIVE" = "true" ]; then
+            # 刚下播
+            STREAM_START=$(echo "$CURRENT_JSON" | grep -oP '"streamStartTime":\s*"[^"]*"' || echo "\"\"")
+            STREAM_END="$TIMESTAMP"
+          else
+            # 状态未变化，保留原有时间戳
+            STREAM_START=$(echo "$CURRENT_JSON" | grep -oP '"streamStartTime":\s*"[^"]*"' | sed 's/"streamStartTime":\s*//' || echo "\"\"")
+            STREAM_END=$(echo "$CURRENT_JSON" | grep -oP '"streamEndTime":\s*"[^"]*"' | sed 's/"streamEndTime":\s*//' || echo "\"\"")
+          fi
+          
+          # 生成新的 JSON
+          cat > bilibili.json << EOF
+          {
+            "isLive": ${IS_LIVE_BOOL},
+            "title": "${TITLE}",
+            "uname": "${UNAME}",
+            "online": ${ONLINE},
+            "system_cover": "${COVER}",
+            "streamStartTime": ${STREAM_START:-""},
+            "streamEndTime": ${STREAM_END:-""},
+            "lastUpdate": "${TIMESTAMP}"
+          }
+          EOF
+          
+          echo "Updated bilibili.json: isLive=${IS_LIVE_BOOL}"
+      
+      - name: Commit and Push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add bilibili.json
+          git commit -m "📡 update: Bilibili live status" || echo "No changes to commit"
+          git push
