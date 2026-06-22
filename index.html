@@ -71,8 +71,6 @@
       display: flex;
       flex-direction: column;
       gap: 18px;
-      position: sticky;
-      top: 36px;
     }
     .avatar-card { padding: 28px 20px; text-align: center; }
     .profile-label {
@@ -577,6 +575,14 @@
   <!-- ══════ 左列：个人资料 ══════ -->
   <div class="profile-col">
 
+    <!-- 近日动态（在左栏内） -->
+    <div class="card feed-card">
+      <div class="card-title">
+        <i style="color:#f09c5a;" class="fas fa-rss"></i> 近日动态
+      </div>
+      <div id="feedList"></div>
+    </div>
+
     <div class="card avatar-card">
       <div class="profile-label">I'm 🍊</div>
       <h1 class="profile-name">xqaxqa</h1>
@@ -597,14 +603,6 @@
     </div>
 
   </div><!-- /左列 -->
-
-  <!-- 近日动态（左栏下方，不sticky） -->
-  <div class="card feed-card" style="margin-top:18px;">
-    <div class="card-title">
-      <i style="color:#f09c5a;" class="fas fa-rss"></i> 近日动态
-    </div>
-    <div id="feedList"></div>
-  </div>
 
   <!-- ══════ 中间：内容区 ══════ -->
   <div class="content-col">
