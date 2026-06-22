@@ -864,8 +864,10 @@
 
     async function fetchSteam() {
       try {
-        // 用 XML 接口（无需 API Key）
-        const res = await fetch('https://steamcommunity.com/profiles/' + STEAM_ID + '/?xml=1');
+        // 用 CORS Anywhere 代理（或直接请求，GitHub Pages 可能允许）
+        const proxy = 'https://api.allorigins.win/raw?url=';
+        const url = encodeURIComponent('https://steamcommunity.com/profiles/' + STEAM_ID + '/?xml=1');
+        const res = await fetch(proxy + url);
         const text = await res.text();
         const parser = new DOMParser();
         const xml = parser.parseFromString(text, 'text/xml');
