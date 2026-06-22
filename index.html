@@ -818,87 +818,49 @@
     draw();
   })();
 
-  // ========== Steam 游戏状态 ==========
+  // ========== Steam 游戏状态（读取本地 JSON，无跨域） ==========
   (function() {
-    const STEAM_ID = '76561199183149434';
     const el = document.getElementById('steamStatus');
     if (!el) return;
 
-    function render(data) {
-      let html = '';
-      if (data.inGame) {
-        html = '<div style="display:flex;align-items:center;gap:12px;">';
-        if (data.logo) {
-          html += '<img src="' + data.logo + '" style="width:48px;height:48px;border-radius:8px;object-fit:cover;" alt="game">';
-        } else {
-          html += '<div style="width:48px;height:48px;border-radius:8px;background:var(--card-bg);display:flex;align-items:center;justify-content:center;font-size:1.4em;">🎮</div>';
-        }
-        html += '<div>';
-        html += '<p style="margin:0 0 2px;font-weight:600;color:#4ade80;">🟢 正在玩 ' + data.gameName + '</p>';
-        if (data.server) { html += '<p style="margin:0;font-size:0.82em;color:var(--accent);">📍 ' + data.server + '</p>'; }
-        html += '</div></div>';
-      } else {
-        // 离线时显示最近常玩的游戏
-        if (data.recentGames && data.recentGames.length > 0) {
-          html = '<p style="margin:0 0 10px;color:var(--text-dim);font-size:0.85em;"><i class="fas fa-moon" style="color:#6b7280;margin-right:4px;"></i>当前离线 · 最近在玩：</p>';
-          data.recentGames.forEach(function(g) {
-            html += '<div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);">';
-            if (g.icon) {
-              html += '<img src="' + g.icon + '" style="width:32px;height:32px;border-radius:6px;object-fit:cover;">';
-            } else {
-              html += '<div style="width:32px;height:32px;border-radius:6px;background:var(--card-bg);display:flex;align-items:center;justify-content:center;font-size:1em;">🎮</div>';
-            }
-            html += '<div style="flex:1;">';
-            html += '<p style="margin:0;font-size:0.88em;color:var(--text);">' + g.name + '</p>';
-            html += '<p style="margin:2px 0 0;font-size:0.78em;color:var(--text-dim);">⏱ ' + g.hours + ' 小时</p>';
-            html += '</div>';
-            if (g.link) { html += '<a href="' + g.link + '" target="_blank" class="card-btn" style="padding:3px 8px;font-size:0.7em;">查看</a>'; }
-            html += '</div>';
-          });
-        } else {
-          html = '<p style="margin:0;"><i class="fas fa-moon" style="color:#6b7280;margin-right:6px;"></i>当前离线 🌙</p>';
-        }
-      }
-      el.innerHTML = html;
-    }
-
     async function fetchSteam() {
       try {
-        // 用 CORS Anywhere 代理（或直接请求，GitHub Pages 可能允许）
-        const proxy = 'https://api.allorigins.win/raw?url=';
-        const url = encodeURIComponent('https://steamcommunity.com/profiles/' + STEAM_ID + '/?xml=1');
-        const res = await fetch(proxy + url);
-        const text = await res.text();
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(text, 'text/xml');
+        const res = await fetch('./steam.json?_t=' + Date.now());
+        const data = await res.json();
 
-        const onlineState = xml.querySelector('onlineState')?.textContent || '';
-        const inGameInfo = xml.querySelector('inGameInfo')?.textContent || '';
-        const inGame = onlineState === 'in-game' || !!inGameInfo;
-
-        if (inGame) {
-          render({inGame:true, gameName:inGameInfo||'游戏中', logo:'', server:''});
-        } else {
-          // 解析最近常玩的游戏
-          const games = [];
-          xml.querySelectorAll('mostPlayedGame').forEach(function(g) {
-            games.push({
-              name: g.querySelector('gameName')?.textContent || '',
-              icon: g.querySelector('gameIcon')?.textContent || '',
-              hours: g.querySelector('hoursOnRecord')?.textContent || '0',
-              link: g.querySelector('gameLink')?.textContent || ''
-            });
-          });
-          render({inGame:false, recentGames:games.slice(0,3)});
+        if (data.status === 'in-game' && data.gameName) {
+          el.innerHTML = '<div style="display:flex;align-items:center;gap:12px;">' +
+            (data.gameIcon ? '<img src="' + data.gameIcon + '" style="width:48px;height:48px;border-radius:8px;object-fit:cover;" alt="game">' :
+            '<div style="width:48px;height:48px;border-radius:8px;background:var(--card-bg);display:flex;align-items:center;justify-content:center;font-size:1.4em;">🎮</div>') +
+            '<div><p style="margin:0;font-weight:600;color:#4ade80;">🟢 正在玩 ' + data.gameName + '</p></div></div>';
+          return;
         }
+
+        // 离线 — 显示最近常玩
+        const games = data.recentGames || [];
+        if (games.length === 0) {
+          el.innerHTML = '<p style="margin:0;"><i class="fas fa-moon" style="color:#6b7280;margin-right:6px;"></i>当前离线 🌙</p>';
+          return;
+        }
+        let html = '<p style="margin:0 0 10px;color:var(--text-dim);font-size:0.85em;"><i class="fas fa-moon" style="color:#6b7280;margin-right:4px;"></i>当前离线 · 最近在玩：</p>';
+        games.forEach(function(g) {
+          html += '<div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);">' +
+            (g.icon ? '<img src="' + g.icon + '" style="width:32px;height:32px;border-radius:6px;object-fit:cover;">' :
+            '<div style="width:32px;height:32px;border-radius:6px;background:var(--card-bg);display:flex;align-items:center;justify-content:center;">🎮</div>') +
+            '<div style="flex:1;"><p style="margin:0;font-size:0.88em;color:var(--text);">' + g.name + '</p>' +
+            (g.hours ? '<p style="margin:2px 0 0;font-size:0.78em;color:var(--text-dim);">⏱ ' + g.hours + ' 小时</p>' : '') +
+            '</div>' +
+            (g.link ? '<a href="' + g.link + '" target="_blank" class="card-btn" style="padding:3px 8px;font-size:0.7em;">查看</a>' : '') +
+            '</div>';
+        });
+        el.innerHTML = html;
       } catch(err) {
-        console.log('Steam状态获取失败:', err);
-        el.innerHTML = '<p style="margin:0;color:var(--text-dim);"><i class="fas fa-exclamation-circle" style="color:#f59e0b;margin-right:6px;"></i>获取失败</p>';
+        console.log('Steam数据加载失败:', err);
+        el.innerHTML = '<p style="margin:0;color:var(--text-dim);"><i class="fas fa-exclamation-circle" style="color:#f59e0b;margin-right:6px;"></i>加载失败</p>';
       }
     }
-
     fetchSteam();
-    setInterval(fetchSteam, 180000);
+    setInterval(fetchSteam, 300000);
   })();
 
   // ========== 直播状态联动 ==========

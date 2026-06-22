@@ -1,0 +1,25 @@
+{
+  "id": "session-1781318586695-uu0ctl",
+  "name": "点外卖",
+  "status": "active",
+  "createdAt": "2026-06-13T02:46:49.957Z",
+  "updatedAt": "2026-06-13T02:57:06.724Z",
+  "agents": [
+    {
+      "id": "agent_h3w0ac2y",
+      "name": "op-8be3ad98-d51a-48d2-84d3-ebb0e2f65b26",
+      "role": "assistant",
+      "status": "idle",
+      "createdAt": "2026-06-13T02:46:49.957Z",
+      "model": "unknown",
+      "systemPrompt": ""
+    }
+  ],
+  "summary": {
+    "id": "summary_qqqsqz87",
+    "title": "点外卖",
+    "createdAt": "2026-06-13T02:46:49.957Z",
+    "file": "summary_qqqsqz87.md"
+  },
+  "lastMessageCount": 140
+}

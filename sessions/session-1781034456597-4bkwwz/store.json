@@ -1,0 +1,25 @@
+{
+  "id": "session-1781034456597-4bkwwz",
+  "name": "南瓜Skill打包部署",
+  "status": "active",
+  "createdAt": "2026-06-09T20:00:08.029Z",
+  "updatedAt": "2026-06-13T04:17:27.059Z",
+  "agents": [
+    {
+      "id": "agent_q1i5o3ac",
+      "name": "Main Agent",
+      "role": "assistant",
+      "status": "idle",
+      "createdAt": "2026-06-09T20:00:08.029Z",
+      "model": "unknown",
+      "systemPrompt": ""
+    }
+  ],
+  "summary": {
+    "id": "summary_ma2k4mde",
+    "title": "南瓜Skill打包部署",
+    "createdAt": "2026-06-09T20:00:08.029Z",
+    "file": "summary_ma2k4mde.md"
+  },
+  "lastMessageCount": 58
+}

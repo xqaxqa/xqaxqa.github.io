@@ -1,0 +1,25 @@
+{
+  "id": "o9cq808k8tf3falwebj2m7tpsqzo@im.wechat",
+  "name": "南瓜分条发",
+  "status": "active",
+  "createdAt": "2026-06-09T20:42:07.989Z",
+  "updatedAt": "2026-06-13T01:54:09.653Z",
+  "agents": [
+    {
+      "id": "agent_coos590i",
+      "name": "Main Agent",
+      "role": "assistant",
+      "status": "idle",
+      "createdAt": "2026-06-09T20:42:07.989Z",
+      "model": "unknown",
+      "systemPrompt": ""
+    }
+  ],
+  "summary": {
+    "id": "summary_yxvty35c",
+    "title": "南瓜分条发",
+    "createdAt": "2026-06-09T20:42:07.989Z",
+    "file": "summary_yxvty35c.md"
+  },
+  "lastMessageCount": 198
+}

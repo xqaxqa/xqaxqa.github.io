@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>导数全套 · 完整版 · 超通俗讲解</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Microsoft YaHei', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            line-height: 1.9;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        h1 { color: #667eea; font-size: 3.5em; margin-bottom: 20px; }
+        .subtitle { color: #666; font-size: 1.5em; margin-bottom: 30px; }
+        
+        .topic-section {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        .topic-title {
+            color: #764ba2;
+            font-size: 2.3em;
+            margin-bottom: 30px;
+            border-bottom: 4px solid #667eea;
+            padding-bottom: 15px;
+        }
+        
+        .story-box {
+            background: #d1ecf1;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            border-left: 5px solid #17a2b8;
+        }
+        .story-title { color: #0c5460; font-size: 1.4em; font-weight: bold; margin-bottom: 15px; }
+        
+        .analogy-box {
+            background: #fff3cd;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            font-size: 1.1em;
+        }
+        .analogy-title { color: #856404; font-size: 1.3em; font-weight: bold; margin-bottom: 15px; }
+        
+        .formula-highlight {
+            background: #fff3cd;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.3em;
+            text-align: center;
+            border: 3px solid #ffc107;
+        }
+        
+        .step-box {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            border: 3px solid #667eea;
+        }
+        .step-title { color: #667eea; font-size: 1.3em; font-weight: bold; margin-bottom: 20px; }
+        .step {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 5px solid #28a745;
+        }
+        .step-number {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        .example-box {
+            background: #d4edda;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+        }
+        .example-title { color: #155724; font-size: 1.3em; font-weight: bold; margin-bottom: 15px; }
+        
+        .tip-box {
+            background: #fff3cd;
+            border: 3px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            font-size: 1.05em;
+        }
+        .tip-title { color: #856404; font-weight: bold; font-size: 1.2em; margin-bottom: 10px; }
+        
+        .key-point {
+            background: #e7e3ff;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 3px solid #667eea;
+            font-size: 1.1em;
+        }
+        .key-point-title { color: #667eea; font-size: 1.2em; font-weight: bold; margin-bottom: 10px; }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1.05em;
+        }
+        .comparison-table th, .comparison-table td {
+            border: 2px solid #ddd;
+            padding: 15px;
+            text-align: left;
+        }
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+            font-size: 1.1em;
+        }
+        .comparison-table tr:nth-child(even) { background: #f8f9fa; }
+        
+        .visual-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            text-align: center;
+            border: 3px solid #e0e0e0;
+        }
+        canvas {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            margin: 15px;
+            background: #fafafa;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 导数全套 · 完整版</h1>
+            <div class="subtitle">用"大白话 + 生活例子 + 步骤拆解"彻底搞懂导数</div>
+            <div style="margin-top: 30px; font-size: 1.2em; color: #666;">
+                📚 包含：9大核心主题 | 每个主题都有：故事引入 + 公式翻译 + 步骤拆解 + 例题详解<br>
+                🎯 目标：不是背公式，是真懂！会做题！
+            </div>
+        </div>
+
+        <!-- 主题1 -->
+        <div class="topic-section">
+            <div class="topic-title">📐 主题一：导数的概念（彻底搞懂！）</div>
+            
+            <div class="story-box">
+                <div class="story-title">📖 故事：牛顿是怎么想到的？</div>
+                <p>牛顿研究"物体运动"时发现：</p>
+                <p>• 我需要知道<strong>每一瞬间</strong>的速度，而不只是平均速度</p>
+                <p>• 比如：子弹飞行时，每一刻的速度都不一样</p>
+                <p>• 怎么求"这一瞬间"的速度？</p>
+                <p style="margin-top: 15px;"><strong>💡 牛顿的妙招：</strong></p>
+                <p>1. 先看"很短时间"内的平均速度</p>
+                <p>2. 让这个时间<strong>无限短</strong>（趋近于0）</p>
+                <p>3. 平均速度就变成"瞬间速度"了！</p>
+            </div>
+
+            <div class="analogy-box">
+                <div class="analogy-title">💡 类比：开车的速度表</div>
+                <p>• 你看速度表：这一刻显示 60 km/h → 这就是"瞬间速度"</p>
+                <p>• 但如果只有里程表：总路程 120 km，总时间 2 h → 平均速度 60 km/h</p>
+                <p>• <strong>导数 = 速度表（瞬间速度）vs 平均速度</strong></p>
+            </div>
+
+            <div class="formula-highlight">
+                <strong>🎯 核心公式（不用背，理解就行）：</strong><br>
+                f'(x) = lim(Δx → 0) [f(x + Δx) - f(x)] / Δx<br>
+                <br>
+                <strong>人话翻译：</strong><br>
+                x变化一点点 → 看y变化多少 → 比值 = 导数
+            </div>
+
+            <div class="key-point">
+                <div class="key-point-title">🎯 记住这3点就够了：</div>
+                <p>1️⃣ <strong>几何意义：</strong>导数 = 切线斜率（曲线上一点的坡度）</p>
+                <p>2️⃣ <strong>物理意义：</strong>导数 = 瞬间速度（这一刻变化多快）</p>
+                <p>3️⃣ <strong>生活意义：</strong>导数 = 敏感度（x动一点，y动多少）</p>
+            </div>
+
+            <div class="example-box">
+                <div class="example-title">📝 超简单例题：</div>
+                <p><strong>题目：</strong>f(x) = x²，求 f'(3)（在x=3处的导数）</p>
+                <p><strong>解法1（用定义）：</strong></p>
+                <p>f'(3) = lim(Δx→0) [(3+Δx)² - 3²] / Δx</p>
+                <p>= lim(Δx→0) [9 + 6Δx + (Δx)² - 9] / Δx</p>
+                <p>= lim(Δx→0) [6Δx + (Δx)²] / Δx</p>
+                <p>= lim(Δx→0) (6 + Δx) = <strong>6</strong></p>
+                <p style="margin-top: 20px;"><strong>解法2（用公式）：</strong></p>
+                <p>(x²)' = 2x → f'(3) = 2×3 = <strong>6</strong> ✓</p>
+                <p style="margin-top: 15px;"><strong>意思：</strong>在x=3这个点，x增加1单位，y大约增加6单位</p>
+            </div>
+        </div>
+
+        <!-- 主题2 -->
+        <div class="topic-section">
+            <div class="topic-title">📐 主题二：基本求导公式（像背乘法表一样背！）</div>
+            
+            <div class="analogy-box">
+                <div class="analogy-title">💡 类比：就像学骑自行车</div>
+                <p>• 一开始需要想：怎么保持平衡？怎么踩踏板？</p>
+                <p>• 熟练后：直接骑，不用想！</p>
+                <p>• <strong>求导公式也是：一开始需要推导，熟练后直接用！</strong></p>
+            </div>
+
+            <table class="comparison-table">
+                <tr>
+                    <th>原函数 f(x)</th>
+                    <th>导数 f'(x)</th>
+                    <th>记忆口诀</th>
+                </tr>
+                <tr>
+                    <td>xⁿ（幂函数）</td>
+                    <td>nxⁿ⁻¹</td>
+                    <td>指数降1，乘以原指数</td>
+                </tr>
+                <tr>
+                    <td>sinx（正弦）</td>
+                    <td>cosx（余弦）</td>
+                    <td>正变余</td>
+                </tr>
+                <tr>
+                    <td>cosx（余弦）</td>
+                    <td>-sinx（负正弦）</td>
+                    <td>余变负正</td>
+                </tr>
+                <tr>
+                    <td>eˣ（指数）</td>
+                    <td>eˣ（不变！）</td>
+                    <td>eˣ最特殊，导数等于自己</td>
+                </tr>
+                <tr>
+                    <td>lnx（对数）</td>
+                    <td>1/x</td>
+                    <td>对数导数等于1/x</td>
+                </tr>
+                <tr>
+                    <td>aˣ（指数）</td>
+                    <td>aˣ · lna</td>
+                    <td>指数导数 = 自己 × ln(底)</td>
+                </tr>
+            </table>
+
+            <div class="key-point">
+                <div class="key-point-title">🎯 运算法则（必须熟练！）：</div>
+                <p>✅ <strong>和差法则：</strong>(u ± v)' = u' ± v'</p>
+                <p>✅ <strong>乘积法则：</strong>(u · v)' = u'v + uv'</p>
+                <p>✅ <strong>商法则：</strong>(u/v)' = (u'v - uv') / v²</p>
+                <p>✅ <strong>链式法则：</strong>f(g(x))' = f'(g(x)) · g'(x)</p>
+            </div>
+
+            <div class="example-box">
+                <div class="example-title">📝 综合例题：</div>
+                <p><strong>题目：</strong>f(x) = 3x⁴ - 2sinx + 5eˣ + ln(x+1)，求 f'(x)</p>
+                <p><strong>解：</strong></p>
+                <p>f'(x) = (3x⁴)' - (2sinx)' + (5eˣ)' + [ln(x+1)]'</p>
+                <p>= 3·4x³ - 2cosx + 5eˣ + 1/(x+1)</p>
+                <p>= <strong>12x³ - 2cosx + 5eˣ + 1/(x+1)</strong></p>
+            </div>
+        </div>
+
+        <!-- 主题3 -->
+        <div class="topic-section">
+            <div class="topic-title">📈 主题三：导数与函数的单调性（超直观！）</div>
+            
+            <div class="story-box">
+                <div class="story-title">📖 故事：爬山 vs 下山</div>
+                <p><strong>想象你在爬山：</strong></p>
+                <p>• 上山时：越走越高 → 函数递增 → <strong>导数 > 0</strong></p>
+                <p>• 下山时：越走越低 → 函数递减 → <strong>导数 < 0</strong></p>
+                <p>• 山顶/山谷：这一刻不升不降 → <strong>导数 = 0</strong></p>
+                <p style="margin-top: 20px;">👉 所以：<strong>看导数的符号，就知道函数往哪走！</strong></p>
+            </div>
+
+            <div class="formula-highlight">
+                <strong>🎯 核心关系（背下来！）：</strong><br>
+                f'(x) > 0 → f(x) <strong>单调递增</strong>（上山）<br>
+                f'(x) < 0 → f(x) <strong>单调递减</strong>（下山）<br>
+                f'(x) = 0 → 可能<strong>极值点</strong>（山顶/山谷）
+            </div>
+
+            <div class="step-box">
+                <div class="step-title">📋 解题步骤（标准流程）：</div>
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <strong>求定义域</strong><br>
+                    比如：分母不能为0、根号内≥0、对数真数>0
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <strong>求导数 f'(x)</strong><br>
+                    用基本公式、链式法则等
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <strong>解 f'(x) > 0 和 f'(x) < 0</strong><br>
+                    找到导数正负的区间
+                </div>
+                <div class="step">
+                    <span class="step-number">4</span>
+                    <strong>写出单调性</strong><br>
+                    递增区间：f'(x) > 0 的解<br>
+                    递减区间：f'(x) < 0 的解
+                </div>
+            </div>
+
+            <div class="example-box">
+                <div class="example-title">📝 经典例题：</div>
+                <p><strong>题目：</strong>求 f(x) = x³ - 3x 的单调区间</p>
+                <p><strong>解：</strong></p>
+                <p><strong>步骤1：</strong>定义域 = R（全体实数）</p>
+                <p><strong>步骤2：</strong>求导数</p>
+                <p>f'(x) = 3x² - 3 = 3(x² - 1) = 3(x-1)(x+1)</p>
+                <p><strong>步骤3：</strong>解 f'(x) > 0 和 f'(x) < 0</p>
+                <p>f'(x) > 0 → 3(x-1)(x+1) > 0 → <strong>x < -1 或 x > 1</strong></p>
+                <p>f'(x) < 0 → 3(x-1)(x+1) < 0 → <strong>-1 < x < 1</strong></p>
+                <p><strong>步骤4：</strong>写出单调性</p>
+                <p>• 递增区间：<strong>(-∞, -1) 和 (1, +∞)</strong></p>
+                <p>• 递减区间：<strong>(-1, 1)</strong></p>
+            </div>
+        </div>
+
+        <!-- 主题4 -->
+        <div class="topic-section">
+            <div class="topic-title">🎯 主题四：极值与最值（山顶 vs 全程最高）</div>
+            
+            <div class="analogy-box">
+                <div class="analogy-title">💡 类比：爬山时的"局部最高" vs "全程最高"</div>
+                <p><strong>🏔️ 极值（局部概念）：</strong></p>
+                <p>• 你在半山腰的一个小山坡顶 → 这是"局部最高"</p>
+                <p>• 但不一定是全程最高（可能后面有更高的山）</p>
+                <p>• <strong>极值 = 某个点比周围都高（或都低）</strong></p>
+                <p style="margin-top: 15px;"><strong>🏆 最值（全局概念）：</strong></p>
+                <p>• 全程的最高点 → 这是"全局最高"</p>
+                <p>• 可能是极值点，也可能是端点</p>
+                <p>• <strong>最值 = 整个区间的最高（或最低）</strong></p>
+            </div>
+
+            <table class="comparison-table">
+                <tr>
+                    <th>对比项</th>
+                    <th>极值</th>
+                    <th>最值</th>
+                </tr>
+                <tr>
+                    <td>范围</td>
+                    <td>局部（某一点附近）</td>
+                    <td>全局（整个区间）</td>
+                </tr>
+                <tr>
+                    <td>个数</td>
+                    <td>可能有多个</td>
+                    <td>最多各一个</td>
+                </tr>
+                <tr>
+                    <td>位置</td>
+                    <td>导数=0的点 或 不可导点</td>
+                    <td>极值点 或 区间端点</td>
+                </tr>
+            </table>
+
+            <div class="formula-highlight">
+                <strong>🎯 极值的判定（两种方法）：</strong><br>
+                <br>
+                <strong>方法1：第一充分条件（看导数符号变化）</strong><br>
+                f'(x) 在 x₀ 左侧 > 0，右侧 < 0 → <strong>极大值</strong><br>
+                f'(x) 在 x₀ 左侧 < 0，右侧 > 0 → <strong>极小值</strong><br>
+                <br>
+                <strong>方法2：第二充分条件（看二阶导数）</strong><br>
+                f'(x₀) = 0 且 f''(x₀) > 0 → <strong>极小值</strong><br>
+                f'(x₀) = 0 且 f''(x₀) < 0 → <strong>极大值</strong>
+            </div>
+
+            <div class="step-box">
+                <div class="step-title">📋 求最值的标准流程：</div>
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <strong>求导数 f'(x)</strong>
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <strong>解 f'(x) = 0，得到驻点</strong>
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <strong>求所有极值 + 端点值</strong>
+                </div>
+                <div class="step">
+                    <span class="step-number">4</span>
+                    <strong>比较大小，最大的就是最大值，最小的就是最小值</strong>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <div class="example-title">📝 经典例题：</div>
+                <p><strong>题目：</strong>求 f(x) = x³ - 3x 在 [-2, 3] 上的最大值和最小值</p>
+                <p><strong>解：</strong></p>
+                <p><strong>步骤1：</strong>求导数 f'(x) = 3x² - 3</p>
+                <p><strong>步骤2：</strong>解 f'(x) = 0 → x = -1 或 x = 1</p>
+                <p><strong>步骤3：</strong>求所有候选点的函数值</p>
+                <p>• f(-2) = -2（左端点）</p>
+                <p>• f(-1) = <strong>2</strong>（极大值）</p>
+                <p>• f(1) = <strong>-2</strong>（极小值）</p>
+                <p>• f(3) = <strong>18</strong>（右端点）</p>
+                <p><strong>步骤4：</strong>比较大小</p>
+                <p>• 最大值 = <strong>18</strong>（在 x = 3 处）</p>
+                <p>• 最小值 = <strong>-2</strong>（在 x = -2 和 x = 1 处）</p>
+            </div>
+        </div>
+
+        <!-- 主题5 -->
+        <div class="topic-section">
+            <div class="topic-title">🔧 主题五：函数中的构造问题（像拼积木一样！）</div>
+            
+            <div class="story-box">
+                <div class="story-title">📖 故事：为什么需要构造函数？</div>
+                <p>有时候题目给的条件，<strong>不是直接能用的</strong>。</p>
+                <p>比如：已知 f'(x) > f(x)，要证明某个结论</p>
+                <p>• 直接看：f'(x) 和 f(x) 混在一起，不好处理</p>
+                <p>• <strong>💡 妙招：构造一个新函数 g(x)，让问题变简单！</strong></p>
+            </div>
+
+            <div class="analogy-box">
+                <div class="analogy-title">💡 类比：做菜时的"调味"</div>
+                <p>• 原材料（f(x)）→ 不好吃</p>
+                <p>• 加点调料（构造 g(x) = f(x) · eˣ 或其他）→ 好吃！</p>
+                <p>• <strong>构造函数 = 找对"调料"，让问题变简单</strong></p>
+            </div>
+
+            <div class="formula-highlight">
+                <strong>🎯 常见构造套路（记下来！）：</strong><br>
+                <br>
+                f'(x) + f(x) > 0 → 构造 g(x) = eˣ · f(x)<br>
+                f'(x) - f(x) > 0 → 构造 g(x) = f(x) / eˣ<br>
+                xf'(x) + f(x) > 0 → 构造 g(x) = x · f(x)<br>
+                要证 f(x) > g(x) → 构造 h(x) = f(x) - g(x)
+            </div>
+
+            <div class="step-box">
+                <div class="step-title">📋 构造函数的思路（3步）：</div>
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <strong>观察题目条件</strong><br>
+                    看看有什么特征？f'(x) 和 f(x) 的关系？
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <strong>选择合适的构造</strong><br>
+                    对照上面的表格，选一个
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <strong>验证构造是否有效</strong><br>
+                    求 g'(x)，看符号是否确定
+                </div>
+            </div>
+
+            <div class="example-box">
+                <div class="example-title">📝 经典例题：</div>
+                <p><strong>题目：</strong>已知 f'(x) > f(x) 对任意 x 成立，且 f(0) = 1，证明：f(x) > eˣ</p>
+                <p><strong>解：</strong></p>
+                <p><strong>构造：</strong>g(x) = f(x) / eˣ</p>
+                <p><strong>求导：</strong>g'(x) = [f'(x) - f(x)] / eˣ</p>
+                <p>• ∵ f'(x) - f(x) > 0，eˣ > 0</p>
+                <p>• ∴ <strong>g'(x) > 0</strong> → g(x) 单调递增</p>
+                <p><strong>证明：</strong></p>
+                <p>要证：f(x) > eˣ</p>
+                <p>⇔ g(x) = f(x)/eˣ > 1</p>
+                <p>∵ g(x) 递增，且 g(0) = f(0)/e⁰ = 1</p>
+                <p>∴ 当 x > 0 时，g(x) > g(0) = 1 ✓</p>
+            </div>
+        </div>
+
+        <!-- 主题6 -->
+        <div class="topic-section">
+            <div class="topic-title">♾️ 主题六：恒成立与存在性问题（搞清楚∀和∃！）</div>
+            
+            <div class="story-box">
+                <div class="story-title">📖 故事：全班考试 vs 至少一个及格</div>
+                <p><strong>♾️ 恒成立（∀，forall）：</strong></p>
+                <p>• 全班所有人考试都 > 60 分 → 恒成立</p>
+                <p>• 翻译：<strong>最小值 > 60</strong></p>
+                <p style="margin-top: 15px;"><strong>∃ 存在性（∃，exists）：</strong></p>
+                <p>• 班里至少有一个人考试 > 60 分 → 存在性</p>
+                <p>• 翻译：<strong>最大值 > 60</strong></p>
+                <p style="margin-top: 15px;">👉 所以：<strong>恒成立看最小值，存在性看最大值</strong></p>
+            </div>
+
+            <table class="comparison-table">
+                <tr>
+                    <th>问题类型</th>
+                    <th>数学语言</th>
+                    <th>转化方法</th>
+                </tr>
+                <tr>
+                    <td>恒成立</td>
+                    <td>∀x ∈ D, f(x) > a</td>
+                    <td>f(x)的<strong>最小值</strong> > a</td>
+                </tr>
+                <tr>
+                    <td>恒成立</td>
+                    <td>∀x ∈ D, f(x) < a</td>
+                    <td>f(x)的<strong>最大值</strong> < a</td>
+                </tr>
+                <tr>
+                    <td>存在性</td>
+                    <td>∃x ∈ D, f(x) > a</td>
+                    <td>f(x)的<strong>最大值</strong> > a</td>
+                </tr>
+                <tr>
+                    <td>存在性</td>
+                    <td>∃x ∈ D, f(x) < a</td>
+                    <td>f(x)的<strong>最小值</strong> < a</td>
+                </tr>
+            </table>
+
+            <div class="formula-highlight">
+                <strong>🎯 含参数的恒成立问题（重点！）：</strong><br>
+                <br>
+                <strong>解法1：分离参数（推荐！）</strong><br>
+                • 把 a 单独放一边：a > g(x) 或 a < g(x)<br>
+                • 求 g(x) 的最值 → 得到 a 的范围<br>
+                <br>
+                <strong>解法2：分类讨论</strong><br>
+                • 把 a 当作常数，求 f(x) 的最值<br>
+                • 让最值满足题目条件 → 解 a<br>
+            </div>
+
+            <div class="step-box">
+                <div class="step-title">📋 分离参数的标准流程：</div>
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <strong>移项</strong><br>
+                    把所有含 a 的项放一边，含 x 的放另一边
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <strong>分离</strong><br>
+                    得到 a > g(x) 或 a < g(x)（注意除负数要变号！）
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <strong>求最值</strong><br>
+                    用导数求 g(x) 的最大值或最小值
+                </div>
+                <div class="step">
+                    <span class="step-number">4</span>
+                    <strong>写答案</strong><br>
+                    a > max(g(x)) 或 a < min(g(x))
+                </div>
+            </div>
+
+            <div class="example-box">
+                <div class="example-title">📝 经典例题：</div>
+                <p><strong>题目：</strong>∀x > 0, ax + 1/x ≥ 2 恒成立，求 a 的取值范围</p>
+                <p><strong>解：</strong></p>
+                <p><strong>分离参数：</strong></p>
+                <p>ax + 1/x ≥ 2</p>
+                <p>→ a ≥ (2 - 1/x) / x = <strong>2/x - 1/x²</strong>（注意x > 0，不变号）</p>
+                <p><strong>令 t = 1/x（t > 0），则：</strong></p>
+                <p>a ≥ 2t - t² = -(t-1)² + 1</p>
+                <p><strong>求最大值：</strong></p>
+                <p>• -(t-1)² + 1 是开口向下的抛物线</p>
+                <p>• 当 t = 1 时，取最大值 <strong>1</strong></p>
+                <p><strong>结论：</strong>a ≥ <strong>1</strong></p>
+            </div>
+        </div>
+
+        <!-- 主题7 -->
+        <div class="topic-section">
+            <div class="topic-title">✅ 主题七：利用导数证明不等式（比大小！）</div>
+            
+            <div class="story-box">
+                <div class="story-title">📖 故事：比身高</div>
+                <p>要证明：<strong>张三比李四高</strong></p>
+                <p>• 方法1：直接量身高，比较数字</p>
+                <p>• 方法2：让张三和李四站一起，看谁高</p>
+                <p>• 方法3：证明张三的身高 - 李四的身高 > 0</p>
+                <p style="margin-top: 15px;">👉 <strong>证明不等式 = 证明"左边 - 右边 > 0"</strong></p>
+            </div>
+
+            <div class="formula-highlight">
+                <strong>🎯 核心思路（3种方法）：</strong><br>
+                <br>
+                <strong>方法1：构造函数法（最常用！）</strong><br>
+                • 构造 g(x) = f(x) - h(x)（左 - 右）<br>
+                • 证明 g(x) 的最小值 ≥ 0（或 > 0）<br>
+                <br>
+                <strong>方法2：值域法</strong><br>
+                • 求左边函数的最大值 M<br>
+                • 求右边函数的最小值 m<br>
+                • 证明 M ≤ m<br>
+                <br>
+                <strong>方法3：放缩法</strong><br>
+                • 用已知不等式（如 eˣ ≥ x+1）放缩<br>
+                • 证明放缩后的不等式<br>
+            </div>
+
+            <div class="step-box">
+                <div class="step-title">📋 构造函数法的标准流程：</div>
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <strong>构造 g(x) = 左 - 右</strong><br>
+                    把不等式右边移项到左边
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <strong>求定义域</strong><br>
+                    确定 x 的范围
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <strong>求 g'(x)，分析单调性</strong><br>
+                    找到 g(x) 的最小值点
+                </div>
+                <div class="step">
+                    <span class="step-number">4</span>
+                    <strong>证明 g(x)的最小值 ≥ 0</strong><br>
+                    如果最小值 ≥ 0，则 g(x) ≥ 0 恒成立
+                </div>
+            </div>
+
+            <div class="example-box">
+                <div class="example-title">📝 经典例题1：证明 eˣ > x + 1 (x ≠ 0)</div>
+                <p><strong>解：</strong></p>
+                <p><strong>步骤1：构造</strong></p>
+                <p>g(x) = eˣ - x - 1</p>
+                <p><strong>步骤2：求导</strong></p>
+                <p>g'(x) = eˣ - 1</p>
+                <p>• 当 x > 0 时，eˣ > 1 → g'(x) > 0 → g(x) 递增</p>
+                <p>• 当 x < 0 时，eˣ < 1 → g'(x) < 0 → g(x) 递减</p>
+                <p>• ∴ <strong>x = 0 是极小值点（也是最小值点）</strong></p>
+                <p><strong>步骤3：证明</strong></p>
+                <p>g(x)的最小值 = g(0) = e⁰ - 0 - 1 = <strong>0</strong></p>
+                <p>∵ x ≠ 0，∴ g(x) > g(0) = 0</p>
+                <p>→ eˣ - x - 1 > 0</p>
+                <p>→ <strong>eˣ > x + 1</strong> ✓</p>
+            </div>
+
+            <div class="key-point">
+                <div class="key-point-title">💡 记住这2个经典不等式（常用！）：</div>
+                <p>✅ <strong>eˣ ≥ x + 1</strong>（当且仅当 x = 0 时取等）</p>
+                <p>✅ <strong>lnx ≤ x - 1</strong>（当且仅当 x = 1 时取等）</p>
+                <p style="margin-top: 15px;">这两个可以用来放缩，证明更复杂的不等式！</p>
+            </div>
+        </div>
+
+        <!-- 主题8 -->
+        <div class="topic-section">
+            <div class="topic-title">🔴 主题八：利用导数研究函数的零点（穿过x轴！）</div>
+            
+            <div class="story-box">
+                <div class="story-title">📖 故事：找路口</div>
+                <p>函数的零点 = 函数图像与 x 轴的交点</p>
+                <p>• 就像：你从A点走到B点，一定会经过某些路口</p>
+                <p>• 如果 f(A) > 0，f(B) < 0，那么中间一定有零点！</p>
+                <p style="margin-top: 15px;">👉 <strong>零点定理：</strong>f(a)·f(b) < 0 → ∃c∈(a,b), f(c)=0</p>
+            </div>
+
+            <div class="formula-highlight">
+                <strong>🎯 零点问题的3种类型：</strong><br>
+                <br>
+                <strong>类型1：证明零点存在（零点定理）</strong><br>
+                • 找到 a, b 使得 f(a)·f(b) < 0<br>
+                • 由零点定理，存在 c∈(a,b) 使得 f(c)=0<br>
+                <br>
+                <strong>类型2：求零点个数（分析单调性）</strong><br>
+                • 求导数，分析单调性<br>
+                • 画草图，看穿过x轴几次<br>
+                <br>
+                <strong>类型3：已知零点个数，求参数范围</strong><br>
+                • 分析函数性质（单调性、极值）<br>
+                • 让极值的符号满足条件<br>
+            </div>
+
+            <div class="step-box">
+                <div class="step-title">📋 求零点个数的标准流程：</div>
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <strong>求定义域</strong><br>
+                    确定 x 的范围
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <strong>求导数 f'(x)，分析单调性</strong><br>
+                    找到递增、递减区间
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <strong>求极值</strong><br>
+                    找出所有极值点，计算极值
+                </div>
+                <div class="step">
+                    <span class="step-number">4</span>
+                    <strong>画草图，判断零点个数</strong><br>
+                    • 极值的符号？<br>
+                    • 当 x→±∞ 时，f(x)→？<br>
+                    • 结合单调性，画出草图<br>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <div class="example-title">📝 经典例题：求 f(x) = x³ - 3x + 1 的零点个数</div>
+                <p><strong>解：</strong></p>
+                <p><strong>步骤1：定义域</strong> = R</p>
+                <p><strong>步骤2：求导，分析单调性</strong></p>
+                <p>f'(x) = 3x² - 3 = 3(x-1)(x+1)</p>
+                <p>• f'(x) > 0 → x < -1 或 x > 1 → <strong>递增</strong></p>
+                <p>• f'(x) < 0 → -1 < x < 1 → <strong>递减</strong></p>
+                <p><strong>步骤3：求极值</strong></p>
+                <p>• 极大值：f(-1) = <strong>3</strong> > 0</p>
+                <p>• 极小值：f(1) = <strong>-1</strong> < 0</p>
+                <p><strong>步骤4：画草图，判断零点个数</strong></p>
+                <p>• 当 x→-∞ 时，f(x)→<strong>-∞</strong></p>
+                <p>• 在 (-∞, -1) 递增，f(-1) = 3 > 0 → <strong>1个零点</strong></p>
+                <p>• 在 (-1, 1) 递减，f(-1)=3>0，f(1)=-1<0 → <strong>1个零点</strong></p>
+                <p>• 在 (1, +∞) 递增，f(1)=-1<0，f(x)→+∞ → <strong>1个零点</strong></p>
+                <p style="margin-top: 15px;">✅ <strong>结论：</strong>f(x) 有 <strong>3个零点</strong></p>
+            </div>
+        </div>
+
+        <!-- 主题9 -->
+        <div class="topic-section">
+            <div class="topic-title">🎭 主题九：隐零点与极值点偏移（高难度！）</div>
+            
+            <div class="story-box">
+                <div class="story-title">📖 故事：猜数字游戏</div>
+                <p><strong>🎭 隐零点：</strong></p>
+                <p>• 你知道有个人，但不知道他叫什么</p>
+                <p>• 你知道他的特征（比如：f'(x₀) = 0）</p>
+                <p>• 虽然解不出 x₀，但可以用他的特征来推导！</p>
+                <p style="margin-top: 15px;"><strong>🎯 极值点偏移：</strong></p>
+                <p>• 正常情况下，极值点应该在正中间</p>
+                <p>• 但有时候会"偏移" → 证明它不在中间</p>
+            </div>
+
+            <div class="formula-highlight">
+                <strong>🎯 隐零点的处理（3步）：</strong><br>
+                <br>
+                <strong>步骤1：</strong>设 f'(x₀) = 0（不解出 x₀）<br>
+                <strong>步骤2：</strong>由 f'(x₀) = 0，得到 x₀ 满足的方程<br>
+                <strong>步骤3：</strong>用这个方程化简，证明结论<br>
+                <br>
+                <strong>💡 关键：</strong>虽然不知道 x₀ 的具体值，但知道它满足什么关系！
+            </div>
+
+            <div class="example-box">
+                <div class="example-title">📝 隐零点经典例题：</div>
+                <p><strong>题目：</strong>f(x) = eˣ - ax，证明：当 a > e 时，f(x) 有两个零点</p>
+                <p><strong>解：</strong></p>
+                <p><strong>步骤1：求导</strong></p>
+                <p>f'(x) = eˣ - a</p>
+                <p><strong>步骤2：设隐零点</strong></p>
+                <p>令 f'(x₀) = 0 → eˣ₀ = a → <strong>x₀ = lna</strong></p>
+                <p><strong>步骤3：分析极值</strong></p>
+                <p>• 当 x < x₀ 时，eˣ < a → f'(x) < 0 → 递减</p>
+                <p>• 当 x > x₀ 时，eˣ > a → f'(x) > 0 → 递增</p>
+                <p>• ∴ <strong>x₀ 是极小值点</strong></p>
+                <p><strong>步骤4：证明有两个零点</strong></p>
+                <p>• 极小值 f(x₀) = eˣ₀ - ax₀ = a - a·lna = a(1 - lna)</p>
+                <p>• ∵ a > e → lna > 1 → 1 - lna < 0 → <strong>f(x₀) < 0</strong></p>
+                <p>• 又 ∵ 当 x→-∞ 时，f(x)→<strong>-∞</strong>；当 x→+∞ 时，f(x)→<strong>+∞</strong></p>
+                <p>• ∴ f(x) 在 (-∞, x₀) 和 (x₀, +∞) 各有 <strong>1个零点</strong></p>
+                <p style="margin-top: 15px;">✅ <strong>结论：</strong>当 a > e 时，f(x) 有两个零点</p>
+            </div>
+
+            <div class="key-point">
+                <div class="key-point-title">💡 最后的话：</div>
+                <p>✅ <strong>隐零点</strong> = 知道它存在，但解不出来 → 用方程关系</p>
+                <p>✅ <strong>极值点偏移</strong> = 证明极值点不在正中间 → 构造对称函数</p>
+                <p>✅ <strong>难度较高</strong> = 需要多练，熟悉套路</p>
+                <p>✅ <strong>高考/考研重点</strong> = 经常考，要掌握！</p>
+            </div>
+        </div>
+
+        <!-- 总结 -->
+        <div class="topic-section">
+            <div class="topic-title">🎓 总结：导数学习路线图</div>
+            <div class="step-box">
+                <div class="step-title">📋 学习顺序建议：</div>
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <strong>理解概念</strong><br>
+                    导数 = 瞬间变化率 = 切线斜率
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <strong>熟记公式</strong><br>
+                    像背乘法表一样，练到不用想
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <strong>单调性</strong><br>
+                    看导数符号，判断函数走向
+                </div>
+                <div class="step">
+                    <span class="step-number">4</span>
+                    <strong>极值与最值</strong><br>
+                    局部 vs 全局
+                </div>
+                <div class="step">
+                    <span class="step-number">5</span>
+                    <strong>综合应用</strong><br>
+                    构造函数、证明不等式、求零点
+                </div>
+            </div>
+
+            <div class="key-point">
+                <div class="key-point-title">💡 最后的话：</div>
+                <p>✅ <strong>导数不难！</strong>难的是"恐惧心"</p>
+                <p>✅ <strong>理解 > 背诵</strong> 知道"为什么"比"是什么"更重要</p>
+                <p>✅ <strong>多画图！</strong>一图胜千言，可视化帮助理解</p>
+                <p>✅ <strong>别怕错！</strong>做错题是正常的，改过来就学会了</p>
+                <p style="margin-top: 20px;">🎯 <strong>记住：</strong>导数就是"变化的快慢"，理解了这点，后面都好办！</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
