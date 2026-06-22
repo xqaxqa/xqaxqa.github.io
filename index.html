@@ -436,6 +436,7 @@
 
     /* --- 双列行 --- */
     .dual-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .triple-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
 
     /* 链接卡 */
     .links-card { padding: 20px 22px; }
@@ -536,7 +537,7 @@
       .profile-col { position: static; flex-direction: row; flex-wrap: wrap; align-items: stretch; }
       .avatar-card { flex: 1; min-width: 260px; }
       .sidebar-col { position: static; flex-direction: row; justify-content: center; flex-wrap: wrap; }
-      .dual-row { grid-template-columns: 1fr; }
+      .dual-row, .triple-row { grid-template-columns: 1fr; }
       .gallery-grid { grid-template-columns: repeat(2, 1fr); }
       .game-desc-row { grid-template-columns: repeat(3, 1fr); }
     }
@@ -587,15 +588,14 @@
   <!-- ══════ 中间：内容区 ══════ -->
   <div class="content-col">
 
-    <!-- 第1行：直播状态 + 公告 -->
-    <div class="dual-row">
+    <!-- 第1行：直播状态 + 公告 + Steam -->
+    <div class="triple-row">
 
       <!-- 直播状态（联动） -->
       <div class="card stream-card">
         <div class="card-title">
           <i style="color:var(--live-green);" class="fas fa-broadcast-tower"></i> 直播状态
         </div>
-        <!-- JS会根据实际开播情况切换 live/offline 类 -->
         <div class="stream-status offline" id="streamStatus">
           <div class="stream-icon-wrap">
             <i class="fas fa-video"></i>
@@ -621,8 +621,16 @@
         </div>
       </div>
 
-      <!-- 公告（Steam 游戏状态） -->
+      <!-- 公告 -->
       <div class="card notice-card" id="about">
+        <div class="card-title">
+          <i style="color:var(--accent3);" class="fas fa-bullhorn"></i> 公告
+        </div>
+        <p>欢迎━(*｀∀´*)ノ亻!来到qa的主页</p>
+      </div>
+
+      <!-- Steam 最近在玩游戏 -->
+      <div class="card notice-card">
         <div class="card-title">
           <i style="color:var(--accent3);" class="fas fa-gamepad"></i> 最近在玩游戏
         </div>
