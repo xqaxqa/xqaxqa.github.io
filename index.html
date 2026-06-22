@@ -283,6 +283,13 @@
     .feed-emoji { font-size: 1.2em; flex-shrink: 0; }
     .feed-date { color: var(--accent); flex-shrink: 0; font-size: 0.85em; min-width: 80px; }
     .feed-text { color: var(--text); line-height: 1.5; }
+    .game-stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+    .game-stat-item { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 10px; background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); transition: transform .2s, background .2s; }
+    .game-stat-item:hover { transform: translateY(-2px); background: rgba(255,255,255,0.06); }
+    .game-stat-item img { width: 80px; height: 30px; object-fit: cover; border-radius: 4px; flex-shrink: 0; background: rgba(255,255,255,0.05); }
+    .game-stat-info { display: flex; flex-direction: column; gap: 2px; }
+    .game-stat-name { color: var(--text); font-size: 0.88em; font-weight: 500; }
+    .game-stat-hours { color: var(--accent); font-size: 0.82em; font-weight: 600; }
 
     /* --- 游戏卡（原技能卡） --- */
     .games-card { padding: 22px 24px; }
@@ -640,6 +647,35 @@
         <i style="color:#f09c5a;" class="fas fa-rss"></i> 近日动态
       </div>
       <div id="feedList"></div>
+    </div>
+
+    <!-- 游戏时长 -->
+    <div class="card feed-card">
+      <div class="card-title">
+        <i style="color:#ff6b6b;" class="fas fa-trophy"></i> 游戏时长
+      </div>
+      <div class="game-stats-grid">
+        <div class="game-stat-item">
+          <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/capsule_231x87.jpg" alt="CS:GO">
+          <div class="game-stat-info"><span class="game-stat-name">CS:GO</span><span class="game-stat-hours">4900 小时</span></div>
+        </div>
+        <div class="game-stat-item">
+          <img src="https://img.3dmgame.com/uploads/images/news/20241227/1735272181_7791.jpg" alt="三角洲行动" onerror="this.src='https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/capsule_231x87.jpg'">
+          <div class="game-stat-info"><span class="game-stat-name">三角洲行动</span><span class="game-stat-hours">2000 小时</span></div>
+        </div>
+        <div class="game-stat-item">
+          <img src="https://webassets.riotgames.com/val/content-ui-images/v1/logo/VALORANT.svg" alt="无畏契约" onerror="this.src='https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/capsule_231x87.jpg'">
+          <div class="game-stat-info"><span class="game-stat-name">无畏契约</span><span class="game-stat-hours">1800 小时</span></div>
+        </div>
+        <div class="game-stat-item">
+          <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1172470/capsule_231x87.jpg" alt="Apex Legends">
+          <div class="game-stat-info"><span class="game-stat-name">Apex Legends</span><span class="game-stat-hours">1200 小时</span></div>
+        </div>
+        <div class="game-stat-item">
+          <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2357570/capsule_231x87.jpg" alt="守望先锋">
+          <div class="game-stat-info"><span class="game-stat-name">守望先锋</span><span class="game-stat-hours">200 小时</span></div>
+        </div>
+      </div>
     </div>
 
     <!-- 图片展示 -->
