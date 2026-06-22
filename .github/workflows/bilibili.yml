@@ -21,15 +21,15 @@ jobs:
           
           # 获取直播状态
           RESPONSE=$(curl -s "$API_URL")
-          IS_LIVE=$(echo "$RESPONSE" | grep -oP '"live_status":\s*\K[0-9]' || echo "0")
-          TITLE=$(echo "$RESPONSE" | grep -oP '"title":\s*"\K[^"]+' || echo "")
-          UNAME=$(echo "$RESPONSE" | grep -oP '"uname":\s*"\K[^"]+' || echo "逆取")
-          ONLINE=$(echo "$RESPONSE" | grep -oP '"online":\s*\K[0-9]+' || echo "0")
-          COVER=$(echo "$RESPONSE" | grep -oP '"system_cover":\s*"\K[^"]+' || echo "")
+          IS_LIVE=$(echo "$RESPONSE" | jq -r '.data.room_info.live_status // "0"')
+          TITLE=$(echo "$RESPONSE" | jq -r '.data.room_info.title // ""')
+          UNAME=$(echo "$RESPONSE" | jq -r '.data.anchor_info.base_info.uname // "逆取"')
+          ONLINE=$(echo "$RESPONSE" | jq -r '.data.room_info.online // "0"')
+          COVER=$(echo "$RESPONSE" | jq -r '.data.room_info.cover // ""')
           
           # 读取当前 bilibili.json
           CURRENT_JSON=$(cat bilibili.json)
-          CURRENT_IS_LIVE=$(echo "$CURRENT_JSON" | grep -oP '"isLive":\s*\K(true|false)' || echo "false")
+          CURRENT_IS_LIVE=$(echo "$CURRENT_JSON" | jq -r '.isLive')
           
           # 转换 boolean
           if [ "$IS_LIVE" = "1" ]; then
@@ -40,38 +40,25 @@ jobs:
           
           # 检测状态变化，记录时间戳
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          STREAM_START=""
-          STREAM_END=""
           
           if [ "$IS_LIVE_BOOL" = "true" ] && [ "$CURRENT_IS_LIVE" = "false" ]; then
-            # 刚开播
-            STREAM_START="$TIMESTAMP"
-            STREAM_END=""
+            # 刚开播：记录开播时间，清空下播时间
+            jq --arg ts "$TIMESTAMP" '.isLive = true | .streamStartTime = $ts | .streamEndTime = "" | .lastUpdate = $ts' bilibili.json > tmp.json && mv tmp.json bilibili.json
           elif [ "$IS_LIVE_BOOL" = "false" ] && [ "$CURRENT_IS_LIVE" = "true" ]; then
-            # 刚下播
-            STREAM_START=$(echo "$CURRENT_JSON" | grep -oP '"streamStartTime":\s*"[^"]*"' || echo "\"\"")
-            STREAM_END="$TIMESTAMP"
+            # 刚下播：记录下播时间，保留开播时间
+            jq --arg ts "$TIMESTAMP" '.isLive = false | .streamEndTime = $ts | .lastUpdate = $ts' bilibili.json > tmp.json && mv tmp.json bilibili.json
           else
-            # 状态未变化，保留原有时间戳
-            STREAM_START=$(echo "$CURRENT_JSON" | grep -oP '"streamStartTime":\s*"[^"]*"' | sed 's/"streamStartTime":\s*//' || echo "\"\"")
-            STREAM_END=$(echo "$CURRENT_JSON" | grep -oP '"streamEndTime":\s*"[^"]*"' | sed 's/"streamEndTime":\s*//' || echo "\"\"")
+            # 状态未变化：只更新 lastUpdate
+            jq --arg ts "$TIMESTAMP" '.lastUpdate = $ts' bilibili.json > tmp.json && mv tmp.json bilibili.json
           fi
           
-          # 生成新的 JSON
-          cat > bilibili.json << EOF
-          {
-            "isLive": ${IS_LIVE_BOOL},
-            "title": "${TITLE}",
-            "uname": "${UNAME}",
-            "online": ${ONLINE},
-            "system_cover": "${COVER}",
-            "streamStartTime": ${STREAM_START:-""},
-            "streamEndTime": ${STREAM_END:-""},
-            "lastUpdate": "${TIMESTAMP}"
-          }
-          EOF
+          # 更新其他字段
+          jq --arg title "$TITLE" --arg uname "$UNAME" --argjson online "$ONLINE" --arg cover "$COVER" \
+            '.title = $title | .uname = $uname | .online = $online | .system_cover = $cover' \
+            bilibili.json > tmp.json && mv tmp.json bilibili.json
           
           echo "Updated bilibili.json: isLive=${IS_LIVE_BOOL}"
+          cat bilibili.json
       
       - name: Commit and Push
         run: |
