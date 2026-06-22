@@ -900,6 +900,55 @@
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeBlogModal();
   });
+
+  // B站直播状态
+  async function updateLiveStatus() {
+    try {
+      const resp = await fetch('bilibili.json?t=' + Date.now());
+      const data = await resp.json();
+      
+      const statusEl = document.getElementById('streamStatus');
+      const titleEl = document.getElementById('streamTitle');
+      const badgeEl = document.getElementById('liveBadge');
+      const descEl = document.getElementById('streamDesc');
+      const lastTimeEl = document.getElementById('lastStreamTime');
+      
+      if (data.isLive) {
+        statusEl.className = 'stream-status live';
+        titleEl.textContent = data.title || '正在直播中 🔴';
+        badgeEl.className = 'live-badge on';
+        badgeEl.textContent = 'LIVE';
+        descEl.textContent = '主播正在直播，快来看看吧~';
+        
+        if (data.streamStartTime) {
+          const startTime = new Date(data.streamStartTime);
+          lastTimeEl.textContent = '🟢 开播时间：' + startTime.toLocaleString('zh-CN');
+        } else {
+          lastTimeEl.textContent = '';
+        }
+      } else {
+        statusEl.className = 'stream-status offline';
+        titleEl.textContent = '正在休息中 💤';
+        badgeEl.className = 'live-badge off';
+        badgeEl.textContent = 'OFFLINE';
+        descEl.textContent = '主播暂时不在，请稍后再来~';
+        
+        if (data.streamEndTime) {
+          const endTime = new Date(data.streamEndTime);
+          lastTimeEl.textContent = '🔴 下播时间：' + endTime.toLocaleString('zh-CN');
+        } else if (data.streamStartTime) {
+          const startTime = new Date(data.streamStartTime);
+          lastTimeEl.textContent = '🟢 上次开播：' + startTime.toLocaleString('zh-CN');
+        } else {
+          lastTimeEl.textContent = '';
+        }
+      }
+    } catch(e) {
+      console.error('Failed to fetch bilibili.json:', e);
+    }
+  }
+  
+  updateLiveStatus();
 </script>
 
 <!-- 灯箱HTML -->
