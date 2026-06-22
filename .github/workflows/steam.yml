@@ -1,0 +1,72 @@
+name: Update Steam Status
+on:
+  schedule:
+    - cron: '*/10 * * * *'  # 每10分钟
+  workflow_dispatch:        # 手动触发
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch Steam data
+        run: |
+          STEAM_ID="76561199183149434"
+          XML=$(curl -s "https://steamcommunity.com/profiles/${STEAM_ID}/?xml=1")
+
+          ONLINE_STATE=$(echo "$XML" | grep -oP '(?<=<onlineState>)[^<]+')
+          IN_GAME=$(echo "$XML" | grep -oP '(?<=<inGameInfo>)[^<]+')
+
+          if [ "$ONLINE_STATE" = "in-game" ] && [ -n "$IN_GAME" ]; then
+            # 获取 gameid
+            GAME_ID=$(echo "$XML" | grep -oP '(?<=<gameid>)[^<]+')
+            # 获取游戏封面
+            HEADER_IMG=""
+            if [ -n "$GAME_ID" ]; then
+              HEADER_IMG=$(curl -s "https://store.steampowered.com/api/appdetails?appids=${GAME_ID}&filters=basic&cc=cn&l=schinese" | grep -oP '"header_image"\s*:\s*"\K[^"]+')
+            fi
+            # 构建 JSON
+            cat > steam.json << EOF
+          {"status": "in-game", "gameName": "$(echo "$IN_GAME" | sed 's/"/\\"/g')", "gameIcon": "$HEADER_IMG", "recentGames": [], "lastUpdate": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"}
+          EOF
+          else
+            # 解析最近常玩游戏
+            GAMES_XML=$(echo "$XML" | sed -n '/<mostPlayedGames>/,/<\/mostPlayedGames>/p')
+            GAMES_JSON="["
+            FIRST=true
+            
+            while IFS= read -r block; do
+              GNAME=$(echo "$block" | grep -oP '(?<=<gameName><!\[CDATA\[)[^]]+(?=\]\]></gameName>)')
+              if [ -z "$GNAME" ]; then
+                GNAME=$(echo "$block" | grep -oP '(?<=<gameName>)[^<]+')
+              fi
+              GICON=$(echo "$block" | grep -oP '(?<=<gameIcon>)[^<]+')
+              GHOURS=$(echo "$block" | grep -oP '(?<=<hoursOnRecord>)[^<]+')
+              GLINK=$(echo "$block" | grep -oP '(?<=<gameLink>)[^<]+')
+              
+              if [ -n "$GNAME" ]; then
+                if [ "$FIRST" = false ]; then GAMES_JSON+=","; fi
+                FIRST=false
+                GNAME_E=$(echo "$GNAME" | sed 's/\\/\\\\/g; s/"/\\"/g')
+                GICON_E=$(echo "$GICON" | sed 's/\\/\\\\/g; s/"/\\"/g')
+                GLINK_E=$(echo "$GLINK" | sed 's/\\/\\\\/g; s/"/\\"/g')
+                GAMES_JSON+="{\"name\":\"$GNAME_E\",\"icon\":\"$GICON_E\",\"hours\":\"$GHOURS\",\"link\":\"$GLINK_E\"}"
+              fi
+            done <<< "$(echo "$GAMES_XML" | awk '/<mostPlayedGame>/,/<\/mostPlayedGame>/' RS='<mostPlayedGame>')"
+            
+            GAMES_JSON+="]"
+            
+            cat > steam.json << EOF
+          {"status": "offline", "gameName": "", "gameIcon": "", "recentGames": $GAMES_JSON, "lastUpdate": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"}
+          EOF
+          fi
+
+          echo "Generated steam.json:"
+          cat steam.json
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git diff --quiet steam.json || (git add steam.json && git commit -m "🔄 auto: update Steam status" && git push)
