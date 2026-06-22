@@ -573,7 +573,8 @@
 
       <p class="profile-subtitle">
         游戏玩家 · AI 探索者<br>
-        无畏契约 / 三角洲行动 ✨
+        无畏契约 / 三角洲行动 ✨<br>
+        <span style="font-size:0.85em;color:var(--text-dim);margin-top:6px;display:inline-block;">欢迎━(*｀∀´*)ノ亻!来到qa的主页</span>
       </p>
 
       <a href="#about" class="about-link" onclick="document.querySelector('.notice-card').scrollIntoView({behavior:'smooth'});return false;">
@@ -620,13 +621,12 @@
         </div>
       </div>
 
-      <!-- 公告 -->
+      <!-- 公告（Steam 游戏状态） -->
       <div class="card notice-card" id="about">
         <div class="card-title">
-          <i style="color:var(--accent3);" class="fas fa-bullhorn"></i> 公告
+          <i style="color:var(--accent3);" class="fas fa-gamepad"></i> 最近在玩游戏
         </div>
-        <p>👋 欢迎来到我的个人主页！</p>
-        <p style="margin-top:8px;">欢迎━(*｀∀´*)ノ亻!来到qa的主页</p>
+        <div id="steamStatus">加载中...</div>
       </div>
 
     </div><!-- /第1行 -->
@@ -816,6 +816,65 @@
       requestAnimationFrame(draw);
     }
     draw();
+  })();
+
+  // ========== Steam 游戏状态 ==========
+  (function() {
+    const STEAM_ID = '76561199183149434';
+    const el = document.getElementById('steamStatus');
+    if (!el) return;
+
+    function render(status) {
+      if (!status.online) {
+        el.innerHTML = '<p style="margin:0;"><i class="fas fa-moon" style="color:#6b7280;margin-right:6px;"></i>当前离线 🌙</p>';
+        return;
+      }
+      let html = '<div style="display:flex;align-items:center;gap:12px;">';
+      if (status.logo) {
+        html += '<img src="' + status.logo + '" style="width:48px;height:48px;border-radius:8px;object-fit:cover;" alt="game">';
+      } else {
+        html += '<div style="width:48px;height:48px;border-radius:8px;background:var(--card-bg);display:flex;align-items:center;justify-content:center;font-size:1.4em;">🎮</div>';
+      }
+      html += '<div>';
+      html += '<p style="margin:0 0 2px;font-weight:600;color:var(--text);">' + status.game + '</p>';
+      if (status.server) {
+        html += '<p style="margin:0;font-size:0.82em;color:var(--accent);">📍 ' + status.server + '</p>';
+      }
+      html += '</div></div>';
+      el.innerHTML = html;
+    }
+
+    async function fetchSteam() {
+      try {
+        // Steam 公开 API，无需 key
+        const res = await fetch('https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=0&steamids=' + STEAM_ID);
+        const data = await res.json();
+        const player = data.response.players[0];
+        if (!player) { render({online:false}); return; }
+
+        if (player.gameid && player.gameextrainfo) {
+          // 获取游戏封面
+          let logo = '';
+          try {
+            const appRes = await fetch('https://store.steampowered.com/api/appdetails?appids=' + player.gameid + '&filters=basic&cc=cn&l=schinese');
+            const appData = await appRes.json();
+            if (appData[player.gameid] && appData[player.gameData].data) {
+              logo = appData[player.gameid].data.header_image || '';
+            }
+          } catch(e) {}
+          render({online:true, game: player.gameextrainfo, server: player.gameserverip || '', logo: logo});
+        } else {
+          render({online:false});
+        }
+      } catch(err) {
+        console.log('Steam状态获取失败:', err);
+        el.innerHTML = '<p style="margin:0;color:var(--text-dim);"><i class="fas fa-exclamation-circle" style="color:#f59e0b;margin-right:6px;"></i>获取失败</p>';
+      }
+    }
+
+    fetchSteam();
+    // 每3分钟刷新一次
+    setInterval(fetchSteam, 180000);
   })();
 
   // ========== 直播状态联动 ==========
