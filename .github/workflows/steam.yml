@@ -1,71 +1,102 @@
 name: Update Steam Status
+
 on:
   schedule:
-    - cron: '*/10 * * * *'  # 每10分钟
-  workflow_dispatch:        # 手动触发
+    - cron: '*/15 * * * *'  # 每15分钟运行一次
+  workflow_dispatch:  # 允许手动触发
+
+permissions:
+  contents: write
 
 jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Fetch Steam data
+      - uses: actions/checkout@v3
+      
+      - name: Fetch Steam Data
         run: |
-          STEAM_ID="76561199183149434"
-          XML=$(curl -s "https://steamcommunity.com/profiles/${STEAM_ID}/?xml=1")
+          python3 << 'EOF'
+          import urllib.request
+          import xml.etree.ElementTree as ET
+          import json
+          import re
+          from datetime import datetime, timezone
 
-          ONLINE_STATE=$(echo "$XML" | grep -oP '(?<=<onlineState>)[^<]+')
-          IN_GAME=$(echo "$XML" | grep -oP '(?<=<inGameInfo>)[^<]+')
+          STEAM_ID = "76561199183149434"
+          url = f"https://steamcommunity.com/profiles/{STEAM_ID}/?xml=1"
 
-          if [ "$ONLINE_STATE" = "in-game" ] && [ -n "$IN_GAME" ]; then
-            # 获取 gameid
-            GAME_ID=$(echo "$XML" | grep -oP '(?<=<gameid>)[^<]+')
-            # 获取游戏封面
-            HEADER_IMG=""
-            if [ -n "$GAME_ID" ]; then
-              HEADER_IMG=$(curl -s "https://store.steampowered.com/api/appdetails?appids=${GAME_ID}&filters=basic&cc=cn&l=schinese" | grep -oP '"header_image"\s*:\s*"\K[^"]+')
-            fi
-            # 构建 JSON
-            cat > steam.json << EOF
-          {"status": "in-game", "gameName": "$(echo "$IN_GAME" | sed 's/"/\\"/g')", "gameIcon": "$HEADER_IMG", "recentGames": [], "lastUpdate": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"}
-          EOF
-          else
-            # 解析最近常玩游戏
-            GAMES_XML=$(echo "$XML" | sed -n '/<mostPlayedGames>/,/<\/mostPlayedGames>/p')
-            GAMES_JSON="["
-            FIRST=true
-            
-            while IFS= read -r block; do
-              GNAME=$(echo "$block" | grep -oP '(?<=<gameName><!\[CDATA\[)[^]]+(?=\]\]></gameName>)')
-              if [ -z "$GNAME" ]; then
-                GNAME=$(echo "$block" | grep -oP '(?<=<gameName>)[^<]+')
-              fi
-              GICON=$(echo "$block" | grep -oP '(?<=<gameIcon>)[^<]+')
-              GHOURS=$(echo "$block" | grep -oP '(?<=<hoursOnRecord>)[^<]+')
-              GLINK=$(echo "$block" | grep -oP '(?<=<gameLink>)[^<]+')
+          try:
+              with urllib.request.urlopen(url, timeout=10) as response:
+                  xml_data = response.read().decode('utf-8')
               
-              if [ -n "$GNAME" ]; then
-                if [ "$FIRST" = false ]; then GAMES_JSON+=","; fi
-                FIRST=false
-                GNAME_E=$(echo "$GNAME" | sed 's/\\/\\\\/g; s/"/\\"/g')
-                GICON_E=$(echo "$GICON" | sed 's/\\/\\\\/g; s/"/\\"/g')
-                GLINK_E=$(echo "$GLINK" | sed 's/\\/\\\\/g; s/"/\\"/g')
-                GAMES_JSON+="{\"name\":\"$GNAME_E\",\"icon\":\"$GICON_E\",\"hours\":\"$GHOURS\",\"link\":\"$GLINK_E\"}"
-              fi
-            done <<< "$(echo "$GAMES_XML" | awk '/<mostPlayedGame>/,/<\/mostPlayedGame>/' RS='<mostPlayedGame>')"
-            
-            GAMES_JSON+="]"
-            
-            cat > steam.json << EOF
-          {"status": "offline", "gameName": "", "gameIcon": "", "recentGames": $GAMES_JSON, "lastUpdate": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"}
+              root = ET.fromstring(xml_data)
+              
+              # 获取在线状态
+              online_state = root.findtext('onlineState', default='offline')
+              in_game_info = root.findtext('inGameInfo', default='')
+              
+              # 构建 steam.json
+              steam_data = {
+                  "status": "in-game" if online_state == "in-game" else "offline",
+                  "gameName": in_game_info if online_state == "in-game" else "",
+                  "gameIcon": "",
+                  "gameLogo": "",
+                  "gameHeader": "",
+                  "recentGames": [],
+                  "lastUpdate": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+              }
+              
+              # 如果在游戏中，获取游戏图标
+              if online_state == "in-game":
+                  game_id_elem = root.find('gameid')
+                  if game_id_elem is not None:
+                      game_id = game_id_elem.text
+                      # 获取游戏封面（Steam CDN）
+                      steam_data["gameIcon"] = f"https://shared.akamai.steamstatic.com/community_assets/images/apps/{game_id}/{game_id}_icon.jpg"
+                      steam_data["gameHeader"] = f"https://shared.akamai.steamstatic.com/community_assets/images/apps/{game_id}/{game_id}_header.jpg"
+              
+              # 获取最近常玩游戏
+              most_played = root.find('mostPlayedGames')
+              if most_played is not None:
+                  for game_elem in most_played.findall('mostPlayedGame')[:6]:  # 最多6个
+                      game_name = game_elem.findtext('gameName', default='')
+                      game_icon = game_elem.findtext('gameIcon', default='')
+                      hours = game_elem.findtext('hoursOnRecord', default='')
+                      game_link = game_elem.findtext('gameLink', default='')
+                      
+                      # 清理 CDATA 标签
+                      if game_name.startswith('<![CDATA['):
+                          game_name = game_name[9:-3]
+                      
+                      steam_data["recentGames"].append({
+                          "name": game_name,
+                          "icon": game_icon,
+                          "hours": hours,
+                          "link": game_link
+                      })
+              
+              # 写入 steam.json
+              with open('steam.json', 'w', encoding='utf-8') as f:
+                  json.dump(steam_data, f, ensure_ascii=False, indent=2)
+              
+              print("Generated steam.json:")
+              print(json.dumps(steam_data, ensure_ascii=False, indent=2))
+              
+          except Exception as e:
+              print(f"Error fetching Steam data: {e}")
+              # 保留现有 steam.json，只更新 lastUpdate
+              try:
+                  with open('steam.json', 'r', encoding='utf-8') as f:
+                      steam_data = json.load(f)
+                  steam_data["lastUpdate"] = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+                  with open('steam.json', 'w', encoding='utf-8') as f:
+                      json.dump(steam_data, f, ensure_ascii=False, indent=2)
+              except:
+                  pass
           EOF
-          fi
-
-          echo "Generated steam.json:"
-          cat steam.json
-
-      - name: Commit and push
+      
+      - name: Commit and Push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
