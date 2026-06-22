@@ -277,6 +277,12 @@
 
     /* --- 公告卡 --- */
     .notice-card { padding: 22px 24px; font-size: 0.85em; line-height: 1.75; color: var(--text-dim); }
+    .feed-card { padding: 22px 24px; }
+    .feed-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--card-border); font-size: 0.88em; }
+    .feed-item:last-child { border-bottom: none; }
+    .feed-emoji { font-size: 1.2em; flex-shrink: 0; }
+    .feed-date { color: var(--accent); flex-shrink: 0; font-size: 0.85em; min-width: 80px; }
+    .feed-text { color: var(--text); line-height: 1.5; }
 
     /* --- 游戏卡（原技能卡） --- */
     .games-card { padding: 22px 24px; }
@@ -628,6 +634,14 @@
         <div id="steamStatus">加载中...</div>
       </div>
 
+    <!-- 近日动态 -->
+    <div class="card feed-card">
+      <div class="card-title">
+        <i style="color:#f09c5a;" class="fas fa-rss"></i> 近日动态
+      </div>
+      <div id="feedList"></div>
+    </div>
+
     <!-- 图片展示 -->
     <div class="card gallery-card">
       <div class="card-title">
@@ -858,6 +872,24 @@
     }
     fetchSteam();
     setInterval(fetchSteam, 300000);
+  })();
+
+  // 近日动态
+  (async function() {
+    try {
+      const res = await fetch('./feed.json?_t=' + Date.now());
+      const feed = await res.json();
+      const el = document.getElementById('feedList');
+      el.innerHTML = feed.slice().reverse().map(item => `
+        <div class="feed-item">
+          <span class="feed-emoji">${item.emoji || '📝'}</span>
+          <span class="feed-date">${item.date}</span>
+          <span class="feed-text">${item.text}</span>
+        </div>
+      `).join('');
+    } catch(e) {
+      document.getElementById('feedList').innerHTML = '<p style="color:var(--text-dim)">暂无动态</p>';
+    }
   })();
 
   // ========== 直播状态联动 ==========
