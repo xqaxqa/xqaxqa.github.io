@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>xqaxqa - 个人主页</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0a0e17;
+      --card-bg: rgba(18, 22, 33, 0.92);
+      --card-border: rgba(255,255,255,0.07);
+      --text: #c8d1e0;
+      --text-dim: #5e6d82;
+      --accent: #f09c5a;
+      --accent2: #83cbac;
+      --accent3: #f0a1a8;
+      --live-green: #4ade80;
+      --live-red: #ff6b6b;
+    }
+
+    body {
+      font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* ===== 星空背景 ===== */
+    #stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    .star {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      animation: twinkle var(--dur) ease-in-out infinite alternate;
+    }
+    @keyframes twinkle {
+      0% { opacity: 0.12; transform: scale(0.7); }
+      100% { opacity: 0.85; transform: scale(1.15); }
+    }
+
+    /* ===== 主容器 ===== */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 36px 28px;
+      display: grid;
+      grid-template-columns: 300px 1fr 64px;
+      gap: 18px;
+      align-items: start;
+      align-content: start;
+    }
+
+    /* ===== 卡片通用 ===== */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      backdrop-filter: blur(16px);
+      transition: all 0.3s cubic-bezier(.25,.46,.45,.94);
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover {
+      border-color: rgba(255,255,255,0.15);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.35), 0 0 24px rgba(240,156,90,0.06);
+    }
+
+    /* ═══ 左列：个人资料 ═══ */
+    .profile-col {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: sticky;
+      top: 36px;
+    }
+    .avatar-card { padding: 28px 20px; text-align: center; }
+    .profile-label {
+      font-size: 0.78em;
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .profile-name {
+      font-size: 1.6em;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent3) 0%, var(--accent) 50%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 0.05em;
+      line-height: 1.3;
+    }
+    .profile-avatar-wrap {
+      position: relative;
+      width: 180px;
+      height: 220px;
+      margin: 20px auto 0;
+      border: 2px dashed var(--card-border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .profile-avatar-wrap:hover {
+      border-color: var(--accent);
+      border-style: solid;
+    }
+    .profile-avatar {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .profile-avatar-wrap:hover .profile-avatar { transform: scale(1.05); }
+    .profile-subtitle {
+      margin-top: 16px;
+      font-size: 0.84em;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+    .about-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 16px;
+      padding: 8px 18px;
+      border-radius: 10px;
+      font-size: 0.82em;
+      color: var(--text-dim);
+      border: 1px solid var(--card-border);
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+    .about-link:hover {
+      color: var(--text);
+      border-color: var(--accent);
+      background: rgba(240,156,90,0.08);
+    }
+    .about-link i { transition: transform 0.25s; }
+    .about-link:hover i { transform: translateX(3px); }
+
+    /* ═══ 中间：内容区 ═══ */
+    .content-col {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .card-title {
+      font-size: 0.95em;
+      font-weight: 600;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      letter-spacing: 0.02em;
+    }
+    .card-title i { font-size: 1em; width: 20px; text-align: center; }
+
+    /* --- 直播状态卡 --- */
+    .stream-card { padding: 24px; }
+    .stream-status {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 20px;
+      border-radius: 14px;
+      transition: all 0.4s ease;
+    }
+    /* 开播中 */
+    .stream-status.live {
+      background: linear-gradient(135deg, rgba(74,222,128,0.12), rgba(74,222,128,0.04));
+      border: 1px solid rgba(74,222,128,0.2);
+    }
+    /* 未开播 */
+    .stream-status.offline {
+      background: linear-gradient(135deg, rgba(94,109,130,0.08), rgba(94,109,130,0.03));
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .stream-icon-wrap {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 2em;
+      position: relative;
+    }
+    .stream-status.live .stream-icon-wrap {
+      background: rgba(74,222,128,0.15);
+      color: var(--live-green);
+      animation: pulse-live 2s ease-in-out infinite;
+    }
+    .stream-status.offline .stream-icon-wrap {
+      background: rgba(94,109,130,0.12);
+      color: var(--text-dim);
+    }
+    @keyframes pulse-live {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.3); }
+      50% { box-shadow: 0 0 0 10px rgba(74,222,128,0); }
+    }
+    .stream-info h3 {
+      font-size: 1em;
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 0.7em;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      animation: blink-live 1.5s ease-in-out infinite;
+    }
+    .live-badge.on {
+      background: var(--live-green);
+      color: #000;
+    }
+    .live-badge.off {
+      background: rgba(94,109,130,0.2);
+      color: var(--text-dim);
+    }
+    @keyframes blink-live {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    .stream-info p {
+      font-size: 0.82em;
+      color: var(--text-dim);
+      line-height: 1.55;
+    }
+    .stream-info .last-stream {
+      margin-top: 6px;
+      font-size: 0.76em;
+      color: var(--text-dim);
+      opacity: 0.75;
+    }
+    .stream-footer { margin-top: 16px; }
+    .card-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border-radius: 9px;
+      font-size: 0.84em;
+      color: var(--text-dim);
+      border: 1px solid var(--card-border);
+      text-decoration: none;
+      transition: all 0.22s;
+      cursor: pointer;
+      background: transparent;
+    }
+    .card-btn:hover {
+      color: var(--text);
+      border-color: var(--accent);
+      background: rgba(240,156,90,0.07);
+    }
+    .card-btn i { font-size: 0.85em; transition: transform 0.22s; }
+    .card-btn:hover i { transform: translateX(3px); }
+    .card-btn.live-btn {
+      border-color: var(--live-green);
+      color: var(--live-green);
+      background: rgba(74,222,128,0.06);
+    }
+    .card-btn.live-btn:hover {
+      background: rgba(74,222,128,0.15);
+      box-shadow: 0 4px 16px rgba(74,222,128,0.15);
+    }
+
+    /* --- 公告卡 --- */
+    .notice-card { padding: 22px 24px; font-size: 0.85em; line-height: 1.75; color: var(--text-dim); }
+
+    /* --- 游戏卡（原技能卡） --- */
+    .games-card { padding: 22px 24px; }
+    .game-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .game-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 16px;
+      border-radius: 8px;
+      font-size: 0.82em;
+      font-weight: 500;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      transition: all 0.25s ease;
+    }
+    .game-chip i { font-size: 1em; }
+    .game-chip:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(240,156,90,0.07);
+      transform: translateY(-1px);
+    }
+    .game-desc-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    .game-stat {
+      text-align: center;
+      padding: 12px 8px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+    .game-stat i {
+      font-size: 1.5em;
+      margin-bottom: 6px;
+      display: block;
+    }
+    .game-stat .stat-label {
+      font-size: 0.72em;
+      color: var(--text-dim);
+    }
+    .game-stat .stat-val {
+      font-size: 0.88em;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* --- 图片展示 --- */
+    .gallery-card { padding: 20px 24px; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .gallery-item {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      aspect-ratio: 16/10;
+      border: 1px solid var(--card-border);
+      transition: all 0.3s ease;
+    }
+    .gallery-item:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.08); }
+    .gallery-item .gallery-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 6px 8px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.75));
+      font-size: 0.7em;
+      color: rgba(255,255,255,0.85);
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .gallery-item:hover .gallery-label { opacity: 1; }
+
+    /* --- 灯箱弹窗 --- */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0,0,0,0.92);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+      padding: 20px;
+    }
+    .lightbox.show { display: flex; }
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 80vh;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+      object-fit: contain;
+    }
+    .lightbox-caption {
+      color: rgba(255,255,255,0.7);
+      font-size: 0.85em;
+      text-align: center;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 20px; right: 24px;
+      color: rgba(255,255,255,0.7);
+      font-size: 2em;
+      cursor: pointer;
+      transition: color 0.2s;
+      background: none; border: none;
+    }
+    .lightbox-close:hover { color: #fff; }
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+      font-size: 1.5em;
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .lightbox-nav:hover { background: rgba(255,255,255,0.2); }
+    .lightbox-prev { left: 20px; }
+    .lightbox-next { right: 20px; }
+    .gallery-item span { display: block; margin-top: 8px; font-size: 0.76em; color: var(--text-dim); }
+
+    /* --- 双列行 --- */
+    .dual-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+
+    /* 链接卡 */
+    .links-card { padding: 20px 22px; }
+    .link-entry {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      font-size: 0.84em;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .link-entry:last-child { border-bottom: none; }
+    .link-entry:hover { padding-left: 6px; }
+    .link-entry:hover .link-name { color: var(--accent); }
+    .link-entry .link-arrow { color: var(--text-dim); font-size: 0.82em; transition: all 0.2s; }
+    .link-entry:hover .link-arrow { color: var(--accent); transform: translateX(3px); }
+
+    /* 联系卡 */
+    .contact-card { padding: 22px 24px; display: flex; flex-direction: column; justify-content: center; min-height: 100%; }
+    .contact-card h3 { font-size: 1em; margin-bottom: 6px; }
+    .contact-card p { font-size: 0.82em; color: var(--text-dim); margin-bottom: 14px; line-height: 1.6; }
+
+    /* Blog卡 */
+    .blog-card { padding: 20px 22px; }
+    .blog-list { list-style: none; }
+    .blog-list li {
+      padding: 8px 0;
+      font-size: 0.83em;
+      color: var(--text-dim);
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .blog-list li:last-child { border-bottom: none; }
+    .blog-list li:hover { padding-left: 5px; color: var(--text); }
+    .blog-list li::before { content: '📝'; font-size: 0.8em; }
+
+    /* GitHub仓库卡 */
+    .repo-card { padding: 20px 22px; }
+    .repo-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      font-size: 0.84em;
+      transition: all 0.2s;
+    }
+    .repo-item:last-child { border-bottom: none; }
+    .repo-item:hover { padding-left: 6px; }
+    .repo-left { display: flex; align-items: center; gap: 8px; }
+    .repo-left i { color: var(--text-dim); font-size: 1em; }
+    .repo-name { color: var(--text); font-weight: 500; }
+    .repo-desc { font-size: 0.78em; color: var(--text-dim); margin-left: 20px; }
+    .repo-meta { display: flex; gap: 12px; font-size: 0.72em; color: var(--text-dim); }
+    .repo-meta span { display: flex; align-items: center; gap: 3px; }
+
+    /* ═══ 最右列：图标侧边栏 ═══ */
+    .sidebar-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 36px;
+    }
+    .side-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1em;
+      color: var(--text-dim);
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(.25,.46,.45,.94);
+      cursor: pointer;
+    }
+    .side-icon:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: rgba(240,156,90,0.1);
+      transform: translateY(-3px) scale(1.1);
+      box-shadow: 0 6px 18px rgba(240,156,90,0.15);
+    }
+
+    /* ===== 响应式 ===== */
+    @media (max-width: 960px) {
+      .container { grid-template-columns: 1fr; gap: 14px; padding: 24px 18px; }
+      .profile-col { position: static; flex-direction: row; flex-wrap: wrap; align-items: stretch; }
+      .avatar-card { flex: 1; min-width: 260px; }
+      .sidebar-col { position: static; flex-direction: row; justify-content: center; flex-wrap: wrap; }
+      .dual-row { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .game-desc-row { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 520px) {
+      .container { padding: 16px 12px; }
+      .profile-col { flex-direction: column; }
+      .profile-avatar-wrap { width: 140px; height: 170px; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .side-icon { width: 40px; height: 40px; font-size: 1em; }
+      .game-desc-row { grid-template-columns: 1fr 1fr; }
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<div class="container">
+
+  <!-- ══════ 左列：个人资料 ══════ -->
+  <div class="profile-col">
+
+    <div class="card avatar-card">
+      <div class="profile-label">I'm 🍊</div>
+      <h1 class="profile-name">xqaxqa</h1>
+
+      <div class="profile-avatar-wrap">
+        <img src="images/avatar.jpg" alt="avatar" class="profile-avatar">
+      </div>
+
+      <p class="profile-subtitle">
+        游戏玩家 · AI 探索者<br>
+        无畏契约 / 三角洲行动 ✨
+      </p>
+
+      <a href="#about" class="about-link" onclick="document.querySelector('.notice-card').scrollIntoView({behavior:'smooth'});return false;">
+        关于我 <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+
+  </div><!-- /左列 -->
+
+  <!-- ══════ 中间：内容区 ══════ -->
+  <div class="content-col">
+
+    <!-- 第1行：直播状态 + 公告 -->
+    <div class="dual-row">
+
+      <!-- 直播状态（联动） -->
+      <div class="card stream-card">
+        <div class="card-title">
+          <i style="color:var(--live-green);" class="fas fa-broadcast-tower"></i> 直播状态
+        </div>
+        <!-- JS会根据实际开播情况切换 live/offline 类 -->
+        <div class="stream-status offline" id="streamStatus">
+          <div class="stream-icon-wrap">
+            <i class="fas fa-video"></i>
+          </div>
+          <div class="stream-info">
+            <h3>
+              <span id="streamTitle">正在休息中 💤</span>
+              <span class="live-badge off" id="liveBadge">OFFLINE</span>
+            </h3>
+            <p id="streamDesc">主播暂时不在，请稍后再来~</p>
+            <p class="last-stream" id="lastStreamTime">上次开播：2026-06-22 16:00</p>
+          </div>
+        </div>
+        <div class="stream-footer">
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <a href="https://live.douyin.com/239837195621" target="_blank" class="card-btn live-btn" id="douyinBtn">
+              <i class="fab fa-tiktok"></i> 抖音直播间 <i class="fas fa-arrow-right"></i>
+            </a>
+            <a href="http://live.bilibili.com/23199566" target="_blank" class="card-btn live-btn" id="bilibiliBtn">
+              <i class="fab fa-bilibili"></i> 哔哩哔哩直播间 <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 公告 -->
+      <div class="card notice-card" id="about">
+        <div class="card-title">
+          <i style="color:var(--accent3);" class="fas fa-bullhorn"></i> 公告
+        </div>
+        <p>👋 欢迎来到我的个人主页！</p>
+        <p style="margin-top:8px;">这里还在持续建设中，会慢慢添加更多内容和项目。有任何想法欢迎交流~ 💬</p>
+      </div>
+
+    </div><!-- /第1行 -->
+
+    <!-- 图片展示 -->
+    <div class="card gallery-card">
+      <div class="card-title">
+        <i style="color:#b794f6;" class="fas fa-images"></i> 图片展示
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item" onclick="openLightbox(0)"><img src="images/car_01.jpg" alt="法拉利 F40"><span class="gallery-label">🚗 法拉利 F40</span></div>
+        <div class="gallery-item" onclick="openLightbox(1)"><img src="images/car_02.jpg" alt="法拉利 F40"><span class="gallery-label">🚗 法拉利 F40</span></div>
+        <div class="gallery-item" onclick="openLightbox(2)"><img src="images/car_03.jpg" alt="阿斯顿·马丁 Valkyrie"><span class="gallery-label">🏎️ Valkyrie 夜间</span></div>
+        <div class="gallery-item" onclick="openLightbox(3)"><img src="images/car_04.jpg" alt="阿斯顿·马丁 Valkyrie"><span class="gallery-label">🏎️ Valkyrie 暗调</span></div>
+        <div class="gallery-item" onclick="openLightbox(4)"><img src="images/car_05.jpg" alt="阿斯顿·马丁 Valkyrie"><span class="gallery-label">🏎️ Valkyrie 黄昏</span></div>
+        <div class="gallery-item" onclick="openLightbox(5)"><img src="images/car_06.jpg" alt="阿斯顿·马丁 Valkyrie"><span class="gallery-label">🏎️ Valkyrie 雨滴</span></div>
+        <div class="gallery-item" onclick="openLightbox(6)"><img src="images/car_07.jpg" alt="阿斯顿·马丁 Valkyrie"><span class="gallery-label">🏎️ Valkyrie 赛道</span></div>
+        <div class="gallery-item" onclick="openLightbox(7)"><img src="images/car_08.jpg" alt="Zenvo ST1"><span class="gallery-label">⚡ Zenvo ST1</span></div>
+        <div class="gallery-item" onclick="openLightbox(8)"><img src="images/car_09.jpg" alt="Zenvo ST1"><span class="gallery-label">⚡ Zenvo ST1</span></div>
+      </div>
+    </div>
+
+    <!-- 游戏 & 技能（全宽） -->
+    <div class="card games-card">
+      <div class="card-title">
+        <i style="color:#ff6b6b;" class="fas fa-gamepad"></i> 游戏 & 技能
+      </div>
+      <div class="game-row">
+        <span class="game-chip"><i class="fas fa-crosshairs"></i> 无畏契约</span>
+        <span class="game-chip"><i class="fas fa-gun"></i> 三角洲行动</span>
+        <span class="game-chip"><i class="fas fa-robot"></i> AI 使用高手</span>
+        <span class="game-chip"><i class="fas fa-code"></i> HTML/CSS</span>
+        <span class="game-chip"><i class="fab fa-js-square"></i> JavaScript</span>
+        <span class="game-chip"><i class="fab fa-vuejs"></i> Vue.js</span>
+        <span class="game-chip"><i class="fab fa-git-alt"></i> Git</span>
+        <span class="game-chip"><i class="fas fa-terminal"></i> 持续学习中...</span>
+      </div>
+      <div class="game-desc-row">
+        <div class="game-stat">
+          <i style="color:#ff4655;" class="fas fa-shield-halved"></i>
+          <div class="stat-label">主玩</div>
+          <div class="stat-val">Valorant</div>
+        </div>
+        <div class="game-stat">
+          <i style="color:#f59e0b;" class="fas fa-user-ninja"></i>
+          <div class="stat-label">常驻</div>
+          <div class="stat-val">三角洲</div>
+        </div>
+        <div class="game-stat">
+          <i style="color:var(--accent2);" class="fas fa-brain"></i>
+          <div class="stat-label">特长</div>
+          <div class="stat-val">AI 工具</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 第2行：GitHub仓库 + 联系我 -->
+    <div class="dual-row">
+
+      <!-- 友情链接 -->
+      <div class="card repo-card">
+        <div class="card-title">
+          <i style="color:#b794f6;" class="fas fa-link"></i> 友情链接
+        </div>
+        <div class="repo-item">
+          <div class="repo-left">
+            <i class="fab fa-tiktok" style="color:#fe2c55;"></i>
+            <span class="repo-name">抖音主页</span>
+          </div>
+          <a href="https://www.douyin.com/user/MS4wLjABAAAAA-FFzDB6XytbGs1_Ws3s2AimYA3wOFQ_NiIlWUw4qXsKZd7rdArvXMMhMBAa_MGf?from_tab_name=live" target="_blank" class="card-btn" style="padding:4px 10px;font-size:0.72em;">直达 <i class="fas fa-external-link-alt"></i></a>
+        </div>
+        <div class="repo-item">
+          <div class="repo-left">
+            <i class="fab fa-x-twitter" style="color:#e2e8f0;"></i>
+            <span class="repo-name">Twitter / X</span>
+          </div>
+          <a href="https://x.com/xqn795540446872" target="_blank" class="card-btn" style="padding:4px 10px;font-size:0.72em;">直达 <i class="fas fa-external-link-alt"></i></a>
+        </div>
+      </div>
+
+      <!-- 联系我 -->
+      <div class="card contact-card" id="contact">
+        <h3>📬 Get In Touch</h3>
+        <p>很高兴认识你！<br>欢迎通过以下方式联系 ✨</p>
+        <a href="mailto:xqaxqavip@163.com" class="card-btn">
+          发送邮件 <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+
+    </div><!-- /第2行 -->
+
+    <!-- Blog（全宽） -->
+    <div class="card blog-card">
+      <div class="card-title">
+        <i style="color:#74c0fc;" class="fas fa-book-open"></i> Blog & 笔记
+      </div>
+      <ul class="blog-list">
+        <li>🎯 瓦罗兰特准心参数分享</li>
+        <li>🔫 改枪码 · 烽火地带武器皮肤</li>
+        <li>🖥️ 软路由做旁路由 · FTTR 实操指南</li>
+      </ul>
+      <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;">
+        <a href="#" class="card-btn" onclick="showBlogDetail('val')"><i class="fas fa-crosshairs"></i> 准心</a>
+        <a href="#" class="card-btn" onclick="showBlogDetail('gun')"><i class="fas fa-gun"></i> 改枪码</a>
+        <a href="#" class="card-btn" onclick="showBlogDetail('router')"><i class="fas fa-wifi"></i> 旁路由</a>
+      </div>
+    </div>
+
+  </div><!-- /中间内容区 -->
+
+  <!-- ══════ 最右列：图标侧边栏 ══════ -->
+  <div class="sidebar-col">
+    <a href="https://github.com/xqaxqa" target="_blank" class="side-icon" title="GitHub">
+      <i class="fab fa-github"></i>
+    </a>
+    <a href="http://live.bilibili.com/23199566" target="_blank" class="side-icon" id="sideStreamBtn" title="B站直播">
+      <i class="fas fa-broadcast-tower"></i>
+    </a>
+    <a href="mailto:xqaxqavip@163.com" class="side-icon" title="Email">
+      <i class="fas fa-envelope"></i>
+    </a>
+    <a href="https://www.douyin.com/user/MS4wLjABAAAAA-FFzDB6XytbGs1_Ws3s2AimYA3wOFQ_NiIlWUw4qXsKZd7rdArvXMMhMBAa_MGf?from_tab_name=live" target="_blank" class="side-icon" title="抖音">
+      <i class="fab fa-tiktok"></i>
+    </a>
+    <a href="https://x.com/xqn795540446872" target="_blank" class="side-icon" title="Twitter/X">
+      <i class="fab fa-x-twitter"></i>
+    </a>
+  </div>
+
+</div>
+
+<!-- 星空 + 直播状态脚本 -->
+<script>
+  // ========== 星空 ==========
+  const container = document.getElementById('stars');
+  for (let i = 0; i < 100; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = `
+      left:${Math.random()*100}%;top:${Math.random()*100}%;
+      width:${Math.random()*2+0.4}px;height:${Math.random()*2+0.4}px;
+      animation-duration:${Math.random()*3+2}s;
+      animation-delay:${Math.random()*5}s;
+    `;
+    container.appendChild(s);
+  }
+
+  // ========== 直播状态联动 ==========
+  // ⚠️ 请修改下面的配置为你的真实信息
+
+  const STREAM_CONFIG = {
+    // 主平台
+    platform: 'bilibili',
+
+    // B站房间号
+    roomId: '23199566',
+
+    // 抖音直播间ID（备用）
+    douyinRoomId: '239837195621',
+
+    // 上次开播时间（手动更新）
+    lastStreamTime: '2026-06-22 16:00',
+
+    // 直播间链接
+    bilibiliUrl: 'http://live.bilibili.com/23199566',
+    douyinUrl: 'https://live.douyin.com/239837195621',
+    streamUrl: 'http://live.bilibili.com/23199566',
+  };
+
+  // 更新UI的函数
+  function updateStreamUI(isLive) {
+    const statusEl = document.getElementById('streamStatus');
+    const titleEl = document.getElementById('streamTitle');
+    const descEl = document.getElementById('streamDesc');
+    const badgeEl = document.getElementById('liveBadge');
+    const lastEl = document.getElementById('lastStreamTime');
+    const douyinBtn = document.getElementById('douyinBtn');
+    const bilibiliBtn = document.getElementById('bilibiliBtn');
+    const sideBtn = document.getElementById('sideStreamBtn');
+
+    if (isLive) {
+      statusEl.className = 'stream-status live';
+      titleEl.textContent = '🔴 正在直播中！';
+      descEl.textContent = '快来直播间一起玩吧~';
+      badgeEl.className = 'live-badge on';
+      badgeEl.textContent = 'LIVE';
+      // 两个按钮都高亮
+      [douyinBtn, bilibiliBtn].forEach(b => {
+        b.classList.add('live-btn');
+        b.style.borderColor = 'var(--live-green)';
+        b.style.color = 'var(--live-green)';
+        b.style.background = 'rgba(74,222,128,0.06)';
+      });
+      sideBtn.style.color = 'var(--live-green)';
+      sideBtn.style.borderColor = 'var(--live-green)';
+    } else {
+      statusEl.className = 'stream-status offline';
+      titleEl.textContent = '正在休息中 💤';
+      descEl.textContent = '主播暂时不在，请稍后再来~';
+      badgeEl.className = 'live-badge off';
+      badgeEl.textContent = 'OFFLINE';
+      // 两个按钮恢复默认
+      [douyinBtn, bilibiliBtn].forEach(b => {
+        b.classList.remove('live-btn');
+        b.style.borderColor = '';
+        b.style.color = '';
+        b.style.background = '';
+      });
+      sideBtn.style.color = '';
+      sideBtn.style.borderColor = '';
+    }
+    lastEl.textContent = `上次开播：${STREAM_CONFIG.lastStreamTime}`;
+  }
+
+  // 检测开播状态（通过各平台API）
+  async function checkStreamStatus() {
+    const { platform, roomId } = STREAM_CONFIG;
+
+    if (!roomId) {
+      // 未配置时默认显示离线
+      updateStreamUI(false);
+      return;
+    }
+
+    try {
+      let isLive = false;
+
+      if (platform === 'bilibili') {
+        // B站直播API（优先检测B站）
+        try {
+          const roomRes = await fetch(`https://api.bilibili.com/x/live/web-room/v1/index/getRoomInfo?room_id=${roomId}`);
+          const roomData = await roomRes.json();
+          isLive = roomData?.data?.live_status === 1;
+        } catch(e) { console.log('B站检测失败'); }
+      } else if (platform === 'douyin') {
+        // 斗鱼API
+        const res = await fetch(`https://www.douyutv.com/api/v1/room/${roomId}`);
+        const data = await res.json();
+        isLive = data?.data?.show_status === 1 || data?.data?.show_status === 2 || data?.data?.online > 0;
+      } else if (platform === 'douyin') {
+        // 抖音直播检测（通过页面抓取）
+        try {
+          const res = await fetch(STREAM_CONFIG.douyinUrl, { mode: 'no-cors' });
+          // no-cors 无法读取状态，默认离线
+          isLive = false;
+        } catch(e) { console.log('抖音检测失败:', e); }
+      } else if (platform === 'huya') {
+        // 虎牙API
+        const res = await fetch(`https://www.huya.com/cache.php?m=Live&do=getRoomInfo&roomId=${roomId}`);
+        const data = await res.json();
+        isLive = data?.data?.liveStatus === 1;
+      }
+
+      updateStreamUI(isLive);
+    } catch (err) {
+      console.log('直播状态检测失败:', err);
+      updateStreamUI(false);
+    }
+  }
+
+  // 页面加载时检测
+  checkStreamStatus();
+
+  // 每60秒自动刷新一次
+  setInterval(checkStreamStatus, 60000);
+
+  // ===== 图片灯箱 =====
+  const galleryImages = [
+    { src: 'images/car_01.jpg', label: '🚗 法拉利 F40 — 侧面动态' },
+    { src: 'images/car_02.jpg', label: '🚗 法拉利 F40 — 正面山雾' },
+    { src: 'images/car_03.jpg', label: '🏎️ Aston Martin Valkyrie — 夜间正面' },
+    { src: 'images/car_04.jpg', label: '🏎️ Aston Martin Valkyrie — 夜间侧面' },
+    { src: 'images/car_05.jpg', label: '🏎️ Aston Martin Valkyrie — 黄昏' },
+    { src: 'images/car_06.jpg', label: '🏎️ Aston Martin Valkyrie — 雨滴细节' },
+    { src: 'images/car_07.jpg', label: '🏎️ Aston Martin Valkyrie — 赛道全景' },
+    { src: 'images/car_08.jpg', label: '⚡ Zenvo ST1 — 星空山路' },
+    { src: 'images/car_09.jpg', label: '⚡ Zenvo ST1 — 尾部视角' }
+  ];
+  let currentIdx = 0;
+
+  function openLightbox(idx) {
+    currentIdx = idx;
+    showLightbox(idx);
+    document.getElementById('lightbox').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
+  function showLightbox(idx) {
+    const item = galleryImages[idx];
+    document.getElementById('lbImg').src = item.src;
+    document.getElementById('lbCaption').textContent = item.label;
+  }
+
+  function lbPrev() {
+    currentIdx = (currentIdx - 1 + galleryImages.length) % galleryImages.length;
+    showLightbox(currentIdx);
+  }
+
+  function lbNext() {
+    currentIdx = (currentIdx + 1) % galleryImages.length;
+    showLightbox(currentIdx);
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (!document.getElementById('lightbox').classList.contains('show')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') lbPrev();
+    if (e.key === 'ArrowRight') lbNext();
+  });
+
+  // ===== Blog 详情弹窗 =====
+  const blogData = {
+    val: {
+      title: '🎯 瓦罗兰特准心参数',
+      lines: [
+        '准心1（经典绿）：',
+        '0;P;h;0;f;0;0l;4;0o;0;0a;1;0f;0;1b;0',
+        '准心2（动态十字）：',
+        '0;s;1;P;c;5;u;FF0000FF;o;1;d;1;f;0;0l;2;0o;0;0a;1;0f;0;1b;0;S;s;0.8'
+      ]
+    },
+    gun: {
+      title: '🔫 改枪码 · 烽火地带',
+      lines: [
+        'AS Val 突击步枪 · 6JVPLCC0DOJ39B0J82C2N · 72控',
+        'AS Val 突击步枪 · 6JVPLH00DOJ39B0J82C2N · 61控',
+        'SR-25 射手步枪 · 6JVPLL40DOJ39B0J82C2N · 长枪管',
+        'M7 战斗步枪 · 6JVPLNO0DOJ39B0J82C2N · HAMR',
+        'M7 战斗步枪 · 6JVPLRG0DOJ39B0J82C2N · 24镜',
+        'AWM 狙击步枪 · 6JVPMM80DOJ39B0J82C2N',
+        'AR57 突击步枪 · 6JVPMQ40DOJ39B0J82C2N',
+        'M700 狙击步枪 · 6JVPNIO0DOJ39B0J82C2N',
+        'AS Val（新版）· 6K45RMK0CMGNQ0OTSIRPE · 77控'
+      ]
+    },
+    router: {
+      title: '🖥️ 软路由做旁路由 · FTTR 实操',
+      lines: [
+        '🔸 前提：FTTR 主路由IP假设为 192.168.1.1',
+        '🔸 软路由（旁路由）需手动设置同段IP，如 192.168.1.7',
+        '🔸 旁路由关闭DHCP（一个网络只能有一个DHCP）',
+        '🔸 OpenWrt：DHCP服务器 → 常规设置 → 勾选「忽略此接口」',
+        '🔸 软路由LAN口出一根网线接FTTR的LAN口（只能接一个）',
+        '🔸 需要接管网络的设备：网关改为软路由IP（如192.168.1.7），IP段不变',
+        '🔸 DNS可填：阿里云 223.5.5.5 / 电信 114.114.114.114',
+        '🔸 改完IP后浏览器进不去？尝试新开页面输入新IP访问',
+        '🔸 建议每步操作后保存，出现问题方便排查'
+      ]
+    }
+  };
+
+  function showBlogDetail(key) {
+    const d = blogData[key];
+    document.getElementById('blogModalTitle').innerHTML = '<i class="fas fa-book-open"></i> ' + d.title;
+    document.getElementById('blogModalContent').innerHTML = d.lines.map(l => {
+      if (l.includes('：')) {
+        return '<div style="margin:10px 0 4px;font-weight:600;color:var(--accent);font-size:0.82em;">' + l + '</div>';
+      }
+      return '<div style="font-size:0.82em;line-height:1.7;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.04);word-break:break-all;">' + l + '</div>';
+    }).join('');
+    document.getElementById('blogModal').classList.add('show');
+    document.body.style.overflow = 'hidden';
+    return false;
+  }
+
+  function closeBlogModal() {
+    document.getElementById('blogModal').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeBlogModal();
+  });
+</script>
+
+<!-- 灯箱弹窗HTML -->
+<div class="lightbox" id="lightbox" onclick="if(event.target===this)closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+  <button class="lightbox-nav lightbox-prev" onclick="lbPrev()"><i class="fas fa-chevron-left"></i></button>
+  <button class="lightbox-nav lightbox-next" onclick="lbNext()"><i class="fas fa-chevron-right"></i></button>
+  <img id="lbImg" src="" alt="">
+  <div class="lightbox-caption" id="lbCaption"></div>
+</div>
+
+<!-- Blog详情弹窗 -->
+<div class="lightbox" id="blogModal" onclick="if(event.target===this)closeBlogModal()">
+  <button class="lightbox-close" onclick="closeBlogModal()">&times;</button>
+  <div style="background:var(--card-bg);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:32px;max-width:560px;width:90vw;max-height:75vh;overflow-y:auto;position:relative;">
+    <h2 id="blogModalTitle" style="font-size:1.05em;margin-bottom:20px;display:flex;align-items:center;gap:10px;"></h2>
+    <div id="blogModalContent"></div>
+  </div>
+</div>
+
+</body>
+</html>
