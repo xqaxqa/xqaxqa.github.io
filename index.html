@@ -30,17 +30,46 @@
       position: relative;
     }
 
-    /* ===== 星空背景 ===== */
-    #stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    /* ===== 动态星空背景 ===== */
+    #stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
     .star {
       position: absolute;
       background: #fff;
       border-radius: 50%;
       animation: twinkle var(--dur) ease-in-out infinite alternate;
+      will-change: transform, opacity;
     }
     @keyframes twinkle {
-      0% { opacity: 0.12; transform: scale(0.7); }
-      100% { opacity: 0.85; transform: scale(1.15); }
+      0% { opacity: 0.08; transform: scale(0.6); }
+      100% { opacity: 0.9; transform: scale(1.2); }
+    }
+    /* 流星 */
+    .shooting-star {
+      position: absolute;
+      width: 120px; height: 1px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.85), transparent);
+      border-radius: 1px;
+      animation: shoot linear forwards;
+      opacity: 0;
+    }
+    @keyframes shoot {
+      0% { transform: translateX(0) translateY(0); opacity: 0; }
+      5% { opacity: 1; }
+      70% { opacity: 0.8; }
+      100% { transform: translateX(300px) translateY(180px); opacity: 0; }
+    }
+    /* 星云层 */
+    #nebula {
+      position: fixed; inset: 0; z-index: -1;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 30%, rgba(99,66,168,0.06), transparent),
+        radial-gradient(ellipse 60% 40% at 75% 65%, rgba(240,156,90,0.04), transparent),
+        radial-gradient(ellipse 50% 30% at 50% 80%, rgba(131,203,172,0.03), transparent);
+      animation: nebulaDrift 20s ease-in-out infinite alternate;
+    }
+    @keyframes nebulaDrift {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(15deg); }
     }
 
     /* ===== 主容器 ===== */
@@ -563,6 +592,7 @@
 </head>
 <body>
 
+<div id="nebula"></div>
 <div id="stars"></div>
 
 <div class="container">
@@ -767,19 +797,62 @@
 
 <!-- 星空 + 直播状态脚本 -->
 <script>
-  // ========== 星空 ==========
-  const container = document.getElementById('stars');
-  for (let i = 0; i < 100; i++) {
-    const s = document.createElement('div');
-    s.className = 'star';
-    s.style.cssText = `
-      left:${Math.random()*100}%;top:${Math.random()*100}%;
-      width:${Math.random()*2+0.4}px;height:${Math.random()*2+0.4}px;
-      animation-duration:${Math.random()*3+2}s;
-      animation-delay:${Math.random()*5}s;
-    `;
-    container.appendChild(s);
+  // ========== 动态星空引擎 ==========
+  const starsContainer = document.getElementById('stars');
+  let mouseX = 0, mouseY = 0;
+  let targetX = 0, targetY = 0;
+
+  // 创建星星（分层）
+  function createStars() {
+    for (let i = 0; i < 150; i++) {
+      const s = document.createElement('div');
+      const layer = Math.random();
+      const size = layer > 0.7 ? Math.random() * 2 + 1.2 : (layer > 0.3 ? Math.random() * 1.5 + 0.6 : Math.random() * 1 + 0.3);
+      const speed = layer > 0.7 ? 8 : (layer > 0.3 ? 15 : 25);
+      s.className = 'star';
+      s.dataset.speed = speed;
+      s.style.cssText = `
+        left:${Math.random()*100}%;top:${Math.random()*100}%;
+        width:${size}px;height:${size}px;
+        animation-duration:${Math.random()*3+1.5}s;
+        animation-delay:${Math.random()*5}s;
+        opacity:${layer > 0.7 ? 0.9 : (layer > 0.3 ? 0.5 : 0.25)};
+      `;
+      starsContainer.appendChild(s);
+    }
   }
+  createStars();
+
+  // 鼠标视差跟随
+  document.addEventListener('mousemove', e => {
+    targetX = (e.clientX / window.innerWidth - 0.5) * 30;
+    targetY = (e.clientY / window.innerHeight - 0.5) * 20;
+  });
+
+  function animateStars() {
+    mouseX += (targetX - mouseX) * 0.05;
+    mouseY += (targetY - mouseY) * 0.05;
+    starsContainer.querySelectorAll('.star').forEach(star => {
+      const sp = parseFloat(star.dataset.speed) || 15;
+      star.style.transform = `translate(${mouseX / sp}px, ${mouseY / sp}px)`;
+    });
+    requestAnimationFrame(animateStars);
+  }
+  animateStars();
+
+  // 随机流星
+  function createShootingStar() {
+    const ss = document.createElement('div');
+    ss.className = 'shooting-star';
+    ss.style.left = Math.random() * 70 + '%';
+    ss.style.top = Math.random() * 40 + '%';
+    ss.style.transform = 'rotate(' + (Math.random() * 20 + 25) + 'deg)';
+    ss.style.animationDuration = (Math.random() * 0.8 + 0.6) + 's';
+    starsContainer.appendChild(ss);
+    setTimeout(() => ss.remove(), 2000);
+  }
+  setInterval(() => { if (Math.random() > 0.65) createShootingStar(); }, 2500);
+  setTimeout(createShootingStar, 1500);
 
   // ========== 直播状态联动 ==========
   // ⚠️ 请修改下面的配置为你的真实信息
