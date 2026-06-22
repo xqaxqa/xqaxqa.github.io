@@ -920,12 +920,13 @@
         badgeEl.textContent = 'LIVE';
         descEl.textContent = '主播正在直播，快来看看吧~';
         
+        // 显示开播时间
+        let timeHtml = '';
         if (data.streamStartTime) {
           const startTime = new Date(data.streamStartTime);
-          lastTimeEl.textContent = '🟢 开播时间：' + startTime.toLocaleString('zh-CN');
-        } else {
-          lastTimeEl.textContent = '';
+          timeHtml += '🟢 开播时间：' + startTime.toLocaleString('zh-CN');
         }
+        lastTimeEl.innerHTML = timeHtml;
       } else {
         statusEl.className = 'stream-status offline';
         titleEl.textContent = '正在休息中 💤';
@@ -933,15 +934,18 @@
         badgeEl.textContent = 'OFFLINE';
         descEl.textContent = '主播暂时不在，请稍后再来~';
         
+        // 显示开播时间和下播时间
+        let timeHtml = '';
+        if (data.streamStartTime) {
+          const startTime = new Date(data.streamStartTime);
+          timeHtml += '🟢 开播时间：' + startTime.toLocaleString('zh-CN');
+        }
         if (data.streamEndTime) {
           const endTime = new Date(data.streamEndTime);
-          lastTimeEl.textContent = '🔴 下播时间：' + endTime.toLocaleString('zh-CN');
-        } else if (data.streamStartTime) {
-          const startTime = new Date(data.streamStartTime);
-          lastTimeEl.textContent = '🟢 上次开播：' + startTime.toLocaleString('zh-CN');
-        } else {
-          lastTimeEl.textContent = '';
+          if (timeHtml) timeHtml += '<br>';
+          timeHtml += '🔴 下播时间：' + endTime.toLocaleString('zh-CN');
         }
+        lastTimeEl.innerHTML = timeHtml || '暂无直播记录';
       }
     } catch(e) {
       console.error('Failed to fetch bilibili.json:', e);
