@@ -1,10 +1,12 @@
 # xqaxqa.github.io
 
-个人主页，基于 [Orangii/Personal-page](https://github.com/Orangii/Personal-page) 模板修改。
+个人主页，基于 [Orangii/Personal-page](https://github.com/Jiaocz/Personal-page) 模板修改。
 
 ## 声明
 
-本项目页面模板来源于开源项目，原作者为 **Orangii|橙梓**（[GitHub](https://github.com/Orangii)）。  
+本项目页面模板来源于开源项目，原作者为 **Orangii|*Jiaocz*（[GitHub](https://github.com/Jiaocz)）。  
+本项目页面模板来源于开源项目，原作者为 **Orangii|*Jiaocz*（[GitHub](https://github.com/Jiaocz)）。  
+本项目页面模板来源于开源项目，原作者为 **Orangii|*Jiaocz*（[GitHub](https://github.com/Jiaocz)）。  
 本人在此基础上进行了个性化修改，用于个人主页展示。
 
 ## 修改内容
