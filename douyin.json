@@ -1,9 +1,11 @@
 {
-  "isLive": false,
-  "status": 0,
-  "title": "",
-  "nickname": "",
+  "isLive": true,
+  "status": 4,
+  "title": "玩一会无畏契约",
+  "nickname": "我的精神状态不好",
   "userCount": "0",
-  "roomId": "",
-  "checkedAt": ""
+  "roomId": "7654500328123222811",
+  "coverUrl": "",
+  "streamId": "",
+  "checkedAt": "2026-06-23T11:29:37.147Z"
 }
