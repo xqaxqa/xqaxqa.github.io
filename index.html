@@ -901,58 +901,78 @@
     if (e.key === 'Escape') closeBlogModal();
   });
 
-  // B站直播状态
-  async function updateLiveStatus() {
+  // 多平台直播状态检测（B站 + 抖音）
+  async function updateAllLiveStatus() {
+    let anyLive = false;
+    let liveTitle = '';
+    let liveNickname = '';
+    let livePlatform = '';
+    let timeHtml = '';
+    
+    // 检测 B站
     try {
       const resp = await fetch('bilibili.json?t=' + Date.now());
-      const data = await resp.json();
-      
-      const statusEl = document.getElementById('streamStatus');
-      const titleEl = document.getElementById('streamTitle');
-      const badgeEl = document.getElementById('liveBadge');
-      const descEl = document.getElementById('streamDesc');
-      const lastTimeEl = document.getElementById('lastStreamTime');
-      
-      if (data.isLive) {
-        statusEl.className = 'stream-status live';
-        titleEl.textContent = data.title || '正在直播中 🔴';
-        badgeEl.className = 'live-badge on';
-        badgeEl.textContent = 'LIVE';
-        descEl.textContent = '主播正在直播，快来看看吧~';
-        
-        // 显示开播时间
-        let timeHtml = '';
-        if (data.streamStartTime) {
-          const startTime = new Date(data.streamStartTime);
-          timeHtml += '🟢 开播时间：' + startTime.toLocaleString('zh-CN');
+      const bData = await resp.json();
+      if (bData.isLive) {
+        anyLive = true;
+        liveTitle = bData.title || '正在直播中 🔴';
+        livePlatform = '哔哩哔哩';
+        if (bData.streamStartTime) {
+          timeHtml += '🟢 B站开播：' + new Date(bData.streamStartTime).toLocaleString('zh-CN');
         }
-        lastTimeEl.innerHTML = timeHtml;
-      } else {
-        statusEl.className = 'stream-status offline';
-        titleEl.textContent = '正在休息中 💤';
-        badgeEl.className = 'live-badge off';
-        badgeEl.textContent = 'OFFLINE';
-        descEl.textContent = '主播暂时不在，请稍后再来~';
-        
-        // 显示开播时间和下播时间
-        let timeHtml = '';
-        if (data.streamStartTime) {
-          const startTime = new Date(data.streamStartTime);
-          timeHtml += '🟢 开播时间：' + startTime.toLocaleString('zh-CN');
+      } else if (bData.streamStartTime) {
+        timeHtml += '🟢 B站上次开播：' + new Date(bData.streamStartTime).toLocaleString('zh-CN');
+        if (bData.streamEndTime) {
+          timeHtml += '<br>🔴 B站下播：' + new Date(bData.streamEndTime).toLocaleString('zh-CN');
         }
-        if (data.streamEndTime) {
-          const endTime = new Date(data.streamEndTime);
-          if (timeHtml) timeHtml += '<br>';
-          timeHtml += '🔴 下播时间：' + endTime.toLocaleString('zh-CN');
-        }
-        lastTimeEl.innerHTML = timeHtml || '暂无直播记录';
       }
-    } catch(e) {
-      console.error('Failed to fetch bilibili.json:', e);
+    } catch(e) {}
+    
+    // 检测 抖音
+    try {
+      const resp = await fetch('douyin.json?t=' + Date.now());
+      const dData = await resp.json();
+      if (dData.isLive) {
+        anyLive = true;
+        liveTitle = dData.title || '正在直播中 🔴';
+        liveNickname = dData.nickname || '';
+        livePlatform = '抖音';
+        if (dData.checkedAt) {
+          timeHtml += (timeHtml ? '<br>' : '') + '🟢 抖音直播中（检测于 ' + new Date(dData.checkedAt).toLocaleString('zh-CN') + '）';
+        }
+      }
+    } catch(e) {}
+    
+    // 更新 UI
+    const statusEl = document.getElementById('streamStatus');
+    const titleEl = document.getElementById('streamTitle');
+    const badgeEl = document.getElementById('liveBadge');
+    const descEl = document.getElementById('streamDesc');
+    const lastTimeEl = document.getElementById('lastStreamTime');
+    
+    if (anyLive) {
+      statusEl.className = 'stream-status live';
+      let displayTitle = liveTitle;
+      if (liveNickname && livePlatform === '抖音') {
+        displayTitle = '🎙️ ' + liveTitle + ' [' + livePlatform + ']';
+      } else if (livePlatform) {
+        displayTitle = '🎙️ ' + liveTitle + ' [' + livePlatform + ']';
+      }
+      titleEl.textContent = displayTitle || '正在直播中 🔴';
+      badgeEl.className = 'live-badge on';
+      badgeEl.textContent = 'LIVE';
+      descEl.textContent = '主播正在' + livePlatform + '直播，快来看看吧~';
+    } else {
+      statusEl.className = 'stream-status offline';
+      titleEl.textContent = '正在休息中 💤';
+      badgeEl.className = 'live-badge off';
+      badgeEl.textContent = 'OFFLINE';
+      descEl.textContent = '主播暂时不在，请稍后再来~';
     }
+    lastTimeEl.innerHTML = timeHtml || '暂无直播记录';
   }
   
-  updateLiveStatus();
+  updateAllLiveStatus();
 </script>
 
 <!-- 灯箱HTML -->
