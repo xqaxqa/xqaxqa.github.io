@@ -973,6 +973,7 @@
   }
   
   updateAllLiveStatus();
+  setInterval(updateAllLiveStatus, 30000); // 30秒轮询直播状态
 </script>
 
 <!-- 灯箱HTML -->
