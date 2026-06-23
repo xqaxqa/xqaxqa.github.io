@@ -1,7 +1,7 @@
 name: Check Douyin Live Status
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '*/3 * * * *'
   workflow_dispatch:
 
 permissions:
