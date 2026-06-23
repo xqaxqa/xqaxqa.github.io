@@ -1,14 +1,15 @@
 /**
- * Douyin Live Status Checker v2 - Uses webcast API instead of page parsing
+ * Douyin Live Status Checker v2 - Uses webcast API with liveStatus fallback
  * GitHub Actions compatible, outputs JSON to stdout
  * 
  * Usage: node douyin_check.js [web_rid]
  * 
  * Flow:
  *   1. GET live.douyin.com/ → get ttwid cookie
- *   2. GET webcast/room/web/enter/ → get room status
+ *   2. GET webcast/room/web/enter/ → get room status + liveStatus
+ *   3. Fallback: parse SSR page with liveStatus check
  * 
- * Status: 4 = live, 2 = preparing, 0/other = offline
+ * Key insight: liveStatus="normal" is more real-time than room.status after stream ends
  */
 
 const https = require('https');
@@ -59,28 +60,19 @@ async function main() {
       const m = c.match(/ttwid=([^;]+)/);
       if (m) { ttwid = m[1]; break; }
     }
-    
     if (!ttwid) {
-      // Fallback: try extracting from HTML
       const m = init.body.match(/ttwid=([^;"\s]+)/);
       if (m) ttwid = m[1];
     }
 
     // Step 2: Call webcast API
     const params = new URLSearchParams({
-      aid: '6383',
-      app_name: 'douyin_web',
-      live_id: '1',
-      device_platform: 'web',
-      browser_language: 'zh-CN',
-      browser_platform: 'Win32',
-      browser_name: 'Chrome',
-      browser_version: '131.0.0.0',
-      web_rid: webRid,
-      enter_source: 'web_live_page',
-      cookie_enabled: 'true',
-      screen_width: '1920',
-      screen_height: '1080'
+      aid: '6383', app_name: 'douyin_web', live_id: '1',
+      device_platform: 'web', browser_language: 'zh-CN',
+      browser_platform: 'Win32', browser_name: 'Chrome',
+      browser_version: '131.0.0.0', web_rid: webRid,
+      enter_source: 'web_live_page', cookie_enabled: 'true',
+      screen_width: '1920', screen_height: '1080'
     }).toString();
 
     const apiRes = await httpGet(
@@ -94,20 +86,24 @@ async function main() {
     );
 
     if (apiRes.body.length < 10) {
-      // API returned empty, fallback to page parsing
       return fallbackPageParse(webRid, result);
     }
 
     const json = JSON.parse(apiRes.body);
-    
     if (json.status_code !== 0 || !json.data || !json.data.data || !json.data.data[0]) {
-      // API error, fallback to page parsing
       return fallbackPageParse(webRid, result);
     }
 
     const room = json.data.data[0];
     result.status = parseInt(room.status) || 0;
-    result.isLive = result.status === 4;
+    // liveStatus is more real-time than room.status
+    const liveStatus = String(room.live_status || '').toLowerCase();
+    if (liveStatus === 'normal' || liveStatus === '') {
+      result.isLive = false;
+      result.status = 0;
+    } else {
+      result.isLive = result.status === 4;
+    }
     result.title = room.title || room.title_str || '';
     result.roomId = room.id_str || '';
     result.userCount = room.user_count_str || '0';
@@ -124,18 +120,14 @@ async function main() {
     }
 
   } catch(e) {
-    // Any error, try page parsing fallback
-    try {
-      return await fallbackPageParse(webRid, result);
-    } catch(e2) {
-      result.error = e.message;
-    }
+    try { return await fallbackPageParse(webRid, result); }
+    catch(e2) { result.error = e.message; }
   }
 
   console.log(JSON.stringify(result, null, 2));
 }
 
-// Fallback: parse SSR page (original method)
+// Fallback: parse SSR page with liveStatus check
 async function fallbackPageParse(webRid, result) {
   result.method = 'page';
   try {
@@ -153,18 +145,28 @@ async function fallbackPageParse(webRid, result) {
     
     const chunk = html.body.substring(lastIdx, Math.min(html.body.length, lastIdx + 20000));
     
-    const statusMatch = chunk.match(/status\\":(\d+)/);
+    // liveStatus="normal" means not live (more real-time than status field)
+    const lsMatch = chunk.match(/liveStatus\\\":\\\"([^\\]+)\\\"/);
+    const liveStatus = lsMatch ? lsMatch[1].toLowerCase() : '';
+    
+    const statusMatch = chunk.match(/status\\\":(\\d+)/);
     if (statusMatch) {
-      result.status = parseInt(statusMatch[1]);
-      result.isLive = result.status === 4;
+      const rawStatus = parseInt(statusMatch[1]);
+      if (liveStatus === 'normal' || liveStatus === '') {
+        result.status = 0;
+        result.isLive = false;
+      } else {
+        result.status = rawStatus;
+        result.isLive = rawStatus === 4;
+      }
     }
-    const titleMatch = chunk.match(/title\\":\\"([^\\]+)\\"/);
+    const titleMatch = chunk.match(/title\\\":\\\"([^\\]+)\\\"/);
     if (titleMatch) result.title = titleMatch[1];
-    const nickMatch = chunk.match(/nickname\\":\\"([^\\]+)\\"/);
+    const nickMatch = chunk.match(/nickname\\\":\\\"([^\\]+)\\\"/);
     if (nickMatch) result.nickname = nickMatch[1];
-    const idMatch = chunk.match(/id_str\\":\\"(\d+)\\"/);
+    const idMatch = chunk.match(/id_str\\\":\\\"(\\d+)\\\"/);
     if (idMatch) result.roomId = idMatch[1];
-    const countMatch = chunk.match(/user_count_str\\":\\"([^\\]*)\\"/);
+    const countMatch = chunk.match(/user_count_str\\\":\\\"([^\\]*)\\\"/);
     if (countMatch) result.userCount = countMatch[1];
   } catch(e) {
     result.error = e.message;
