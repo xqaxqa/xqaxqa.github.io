@@ -7,22 +7,22 @@
   "recentGames": [
     {
       "name": "Grand Theft Auto V Enhanced",
-      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/3240220/8355a7bbdb704f727bfba80ec56bc7228991338e.jpg",
-      "hours": "136",
+      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3240220/8355a7bbdb704f727bfba80ec56bc7228991338e.jpg",
+      "hours": "137",
       "link": "https://steamcommunity.com/app/3240220"
     },
     {
       "name": "Call of Duty®",
-      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/1938090/8eaf32220060344996cbf11f697a4f4be943e5f3.jpg",
+      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/1938090/8eaf32220060344996cbf11f697a4f4be943e5f3.jpg",
       "hours": "24",
       "link": "https://steamcommunity.com/app/1938090"
     },
     {
       "name": "IRON NEST: Heavy Turret Simulator Demo",
-      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/4300500/25a197981e8544e003e279d2cd9a200ada02f3de.jpg",
+      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/4300500/25a197981e8544e003e279d2cd9a200ada02f3de.jpg",
       "hours": "3.1",
       "link": "https://steamcommunity.com/app/4300500"
     }
   ],
-  "lastUpdate": "2026-06-27T17:52:56Z"
+  "lastUpdate": "2026-06-27T18:58:49Z"
 }
