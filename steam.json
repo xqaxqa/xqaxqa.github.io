@@ -12,17 +12,17 @@
       "link": "https://steamcommunity.com/app/3240220"
     },
     {
-      "name": "Call of Duty®",
-      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/1938090/8eaf32220060344996cbf11f697a4f4be943e5f3.jpg",
-      "hours": "24",
-      "link": "https://steamcommunity.com/app/1938090"
-    },
-    {
       "name": "IRON NEST: Heavy Turret Simulator Demo",
       "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/4300500/25a197981e8544e003e279d2cd9a200ada02f3de.jpg",
       "hours": "3.1",
       "link": "https://steamcommunity.com/app/4300500"
+    },
+    {
+      "name": "Call of Duty®",
+      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/1938090/8eaf32220060344996cbf11f697a4f4be943e5f3.jpg",
+      "hours": "24",
+      "link": "https://steamcommunity.com/app/1938090"
     }
   ],
-  "lastUpdate": "2026-06-28T06:00:51Z"
+  "lastUpdate": "2026-06-28T09:29:54Z"
 }
