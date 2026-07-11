@@ -7,16 +7,16 @@
   "recentGames": [
     {
       "name": "Grand Theft Auto V Enhanced",
-      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3240220/8355a7bbdb704f727bfba80ec56bc7228991338e.jpg",
+      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/3240220/8355a7bbdb704f727bfba80ec56bc7228991338e.jpg",
       "hours": "145",
       "link": "https://steamcommunity.com/app/3240220"
     },
     {
       "name": "Real Pool 3D - Poolians",
-      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/670290/b74acc3e1996c8cb9ce9e2933c190575fa0be457.jpg",
-      "hours": "4.6",
+      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/670290/b74acc3e1996c8cb9ce9e2933c190575fa0be457.jpg",
+      "hours": "5.1",
       "link": "https://steamcommunity.com/app/670290"
     }
   ],
-  "lastUpdate": "2026-07-11T19:22:49Z"
+  "lastUpdate": "2026-07-11T20:13:29Z"
 }
