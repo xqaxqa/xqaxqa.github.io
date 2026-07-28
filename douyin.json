@@ -2,11 +2,11 @@
   "isLive": false,
   "status": 0,
   "title": "鼠鼠又得吃了",
-  "nickname": "我的精神状态不好",
-  "userCount": "1",
+  "nickname": "",
+  "userCount": "0",
   "roomId": "7667394804828883722",
-  "coverUrl": "https://p3-webcast-sign.douyinpic.com/image-cut-tos-priv/885f8e229a2669d37cf9b9ae11097523~tplv-qz53dukwul-common-resize:0:0.image?biz_tag=app_6383_webcast&from=webcast.room.pack&l=202607281222317790AC9E1CF947C9D350&lk3s=39e7556e&s=enter_room&sc=webcast_cover&x-expires=1787804552&x-signature=%2BRi4ZaBE1AOc1jYn9VHpqUmirq0%3D",
-  "streamId": "FULL_HD1",
-  "checkedAt": "2026-07-28T04:22:29.470Z",
+  "coverUrl": "",
+  "streamId": "",
+  "checkedAt": "2026-07-28T06:46:13.897Z",
   "method": "api"
 }
