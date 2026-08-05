@@ -4,6 +4,13 @@
   "gameIcon": "",
   "gameLogo": "",
   "gameHeader": "",
-  "recentGames": [],
-  "lastUpdate": "2026-08-05T12:12:06Z"
+  "recentGames": [
+    {
+      "name": "Pizza House Simulator🍕 Demo",
+      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/4776950/37f47a55ddf5ccdb6a9670470c06041fd7f07e8a.jpg",
+      "hours": "0.6",
+      "link": "https://steamcommunity.com/app/4776950"
+    }
+  ],
+  "lastUpdate": "2026-08-05T14:30:07Z"
 }
