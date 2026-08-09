@@ -18,17 +18,17 @@
       "link": "https://steamcommunity.com/app/4776950"
     },
     {
+      "name": "OBS Studio",
+      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/1905180/b030cbb319718e6e06ce707ae564e0dd6e560735.jpg",
+      "hours": "5.1",
+      "link": "https://steamcommunity.com/app/1905180"
+    },
+    {
       "name": "Real Pool 3D - Poolians",
       "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/670290/b74acc3e1996c8cb9ce9e2933c190575fa0be457.jpg",
       "hours": "5.4",
       "link": "https://steamcommunity.com/app/670290"
-    },
-    {
-      "name": "OBS Studio",
-      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/1905180/b030cbb319718e6e06ce707ae564e0dd6e560735.jpg",
-      "hours": "4.4",
-      "link": "https://steamcommunity.com/app/1905180"
     }
   ],
-  "lastUpdate": "2026-08-09T11:17:42Z"
+  "lastUpdate": "2026-08-09T11:51:20Z"
 }
