@@ -1,5 +1,5 @@
 {
-  "status": "offline",
+  "status": "in-game",
   "gameName": "",
   "gameIcon": "",
   "gameLogo": "",
@@ -24,11 +24,17 @@
       "link": "https://steamcommunity.com/app/4776950"
     },
     {
+      "name": "Aimlabs",
+      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/714010/15347de11efc127539c388e585af9e92d10d5189.jpg",
+      "hours": "17.5",
+      "link": "https://steamcommunity.com/app/714010"
+    },
+    {
       "name": "Real Pool 3D - Poolians",
       "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/670290/b74acc3e1996c8cb9ce9e2933c190575fa0be457.jpg",
       "hours": "5.4",
       "link": "https://steamcommunity.com/app/670290"
     }
   ],
-  "lastUpdate": "2026-08-10T08:48:57Z"
+  "lastUpdate": "2026-08-10T10:05:52Z"
 }
