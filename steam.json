@@ -1,5 +1,5 @@
 {
-  "status": "in-game",
+  "status": "offline",
   "gameName": "",
   "gameIcon": "",
   "gameLogo": "",
@@ -26,7 +26,7 @@
     {
       "name": "Aimlabs",
       "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/714010/15347de11efc127539c388e585af9e92d10d5189.jpg",
-      "hours": "18.2",
+      "hours": "18.5",
       "link": "https://steamcommunity.com/app/714010"
     },
     {
@@ -42,5 +42,5 @@
       "link": "https://steamcommunity.com/app/670290"
     }
   ],
-  "lastUpdate": "2026-08-14T19:52:51Z"
+  "lastUpdate": "2026-08-14T20:18:38Z"
 }
