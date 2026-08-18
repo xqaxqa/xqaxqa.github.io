@@ -2,11 +2,11 @@
   "isLive": false,
   "status": 0,
   "title": "鼠鼠又得吃了",
-  "nickname": "我的精神状态不好",
+  "nickname": "",
   "userCount": "0",
-  "roomId": "",
+  "roomId": "7667522995565251338",
   "coverUrl": "",
   "streamId": "",
-  "checkedAt": "2026-08-18T07:36:10.940Z",
-  "method": "page"
+  "checkedAt": "2026-08-18T08:05:22.053Z",
+  "method": "api"
 }
