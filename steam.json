@@ -7,22 +7,22 @@
   "recentGames": [
     {
       "name": "OBS Studio",
-      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/1905180/b030cbb319718e6e06ce707ae564e0dd6e560735.jpg",
-      "hours": "52",
+      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/1905180/b030cbb319718e6e06ce707ae564e0dd6e560735.jpg",
+      "hours": "53",
       "link": "https://steamcommunity.com/app/1905180"
     },
     {
       "name": "PEAK",
-      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/3527290/b3a992fd5991bd2f4c956d58e062b0ce2988d6cd.jpg",
+      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3527290/b3a992fd5991bd2f4c956d58e062b0ce2988d6cd.jpg",
       "hours": "9.8",
       "link": "https://steamcommunity.com/app/3527290"
     },
     {
       "name": "Aimlabs",
-      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/714010/15347de11efc127539c388e585af9e92d10d5189.jpg",
+      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/714010/15347de11efc127539c388e585af9e92d10d5189.jpg",
       "hours": "20",
       "link": "https://steamcommunity.com/app/714010"
     }
   ],
-  "lastUpdate": "2026-08-22T11:40:50Z"
+  "lastUpdate": "2026-08-22T11:55:21Z"
 }
