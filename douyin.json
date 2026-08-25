@@ -1,13 +1,12 @@
 {
   "isLive": false,
   "status": 0,
-  "title": "",
+  "title": "鼠鼠又得吃了",
   "nickname": "",
   "userCount": "0",
-  "roomId": "",
+  "roomId": "7667522995565251338",
   "coverUrl": "",
   "streamId": "",
-  "checkedAt": "2026-08-25T12:14:58.541Z",
-  "method": "page",
-  "error": "HTTP timeout"
+  "checkedAt": "2026-08-25T13:12:20.372Z",
+  "method": "api"
 }
