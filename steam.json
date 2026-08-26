@@ -1,5 +1,5 @@
 {
-  "status": "offline",
+  "status": "in-game",
   "gameName": "",
   "gameIcon": "",
   "gameLogo": "",
@@ -30,5 +30,5 @@
       "link": "https://steamcommunity.com/app/714010"
     }
   ],
-  "lastUpdate": "2026-08-26T10:02:41Z"
+  "lastUpdate": "2026-08-26T10:49:03Z"
 }
