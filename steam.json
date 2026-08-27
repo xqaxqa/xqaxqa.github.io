@@ -1,5 +1,5 @@
 {
-  "status": "offline",
+  "status": "in-game",
   "gameName": "",
   "gameIcon": "",
   "gameLogo": "",
@@ -7,28 +7,28 @@
   "recentGames": [
     {
       "name": "OBS Studio",
-      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/1905180/b030cbb319718e6e06ce707ae564e0dd6e560735.jpg",
-      "hours": "65",
+      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/1905180/b030cbb319718e6e06ce707ae564e0dd6e560735.jpg",
+      "hours": "67",
       "link": "https://steamcommunity.com/app/1905180"
     },
     {
       "name": "How to Fish",
-      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/4001890/5c598fcb05447d87a6c67b5b9224103d7d93c16d.jpg",
+      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/4001890/5c598fcb05447d87a6c67b5b9224103d7d93c16d.jpg",
       "hours": "8.1",
       "link": "https://steamcommunity.com/app/4001890"
     },
     {
       "name": "PEAK",
-      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3527290/b3a992fd5991bd2f4c956d58e062b0ce2988d6cd.jpg",
+      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/3527290/b3a992fd5991bd2f4c956d58e062b0ce2988d6cd.jpg",
       "hours": "9.8",
       "link": "https://steamcommunity.com/app/3527290"
     },
     {
       "name": "Aimlabs",
-      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/714010/15347de11efc127539c388e585af9e92d10d5189.jpg",
+      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/714010/15347de11efc127539c388e585af9e92d10d5189.jpg",
       "hours": "20",
       "link": "https://steamcommunity.com/app/714010"
     }
   ],
-  "lastUpdate": "2026-08-27T03:32:42Z"
+  "lastUpdate": "2026-08-27T14:37:22Z"
 }
