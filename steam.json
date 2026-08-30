@@ -1,5 +1,5 @@
 {
-  "status": "offline",
+  "status": "in-game",
   "gameName": "",
   "gameIcon": "",
   "gameLogo": "",
@@ -22,7 +22,13 @@
       "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/714010/15347de11efc127539c388e585af9e92d10d5189.jpg",
       "hours": "20",
       "link": "https://steamcommunity.com/app/714010"
+    },
+    {
+      "name": "HITMAN™ 2",
+      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/863550/3f7c071da7a338e03f6243b73c02c072f1bacee9.jpg",
+      "hours": "1.7",
+      "link": "https://steamcommunity.com/app/863550"
     }
   ],
-  "lastUpdate": "2026-08-30T15:04:54Z"
+  "lastUpdate": "2026-08-30T18:36:14Z"
 }
