@@ -2,11 +2,11 @@
   "isLive": false,
   "status": 0,
   "title": "鱼需慢钓",
-  "nickname": "Q",
+  "nickname": "",
   "userCount": "0",
-  "roomId": "",
+  "roomId": "7689076637663775498",
   "coverUrl": "",
   "streamId": "",
-  "checkedAt": "2026-10-03T19:50:08.683Z",
-  "method": "page"
+  "checkedAt": "2026-10-03T22:27:32.620Z",
+  "method": "api"
 }
