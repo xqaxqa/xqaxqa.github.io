@@ -1,5 +1,5 @@
 {
-  "status": "in-game",
+  "status": "offline",
   "gameName": "",
   "gameIcon": "",
   "gameLogo": "",
@@ -14,9 +14,9 @@
     {
       "name": "OBS Studio",
       "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/1905180/b030cbb319718e6e06ce707ae564e0dd6e560735.jpg",
-      "hours": "102",
+      "hours": "103",
       "link": "https://steamcommunity.com/app/1905180"
     }
   ],
-  "lastUpdate": "2026-10-17T23:04:46Z"
+  "lastUpdate": "2026-10-18T00:58:03Z"
 }
