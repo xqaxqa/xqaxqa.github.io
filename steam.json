@@ -7,22 +7,22 @@
   "recentGames": [
     {
       "name": "Grand Theft Auto V Enhanced",
-      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/3240220/8355a7bbdb704f727bfba80ec56bc7228991338e.jpg",
+      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3240220/8355a7bbdb704f727bfba80ec56bc7228991338e.jpg",
       "hours": "194",
       "link": "https://steamcommunity.com/app/3240220"
     },
     {
       "name": "OBS Studio",
-      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/1905180/b030cbb319718e6e06ce707ae564e0dd6e560735.jpg",
+      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/1905180/b030cbb319718e6e06ce707ae564e0dd6e560735.jpg",
       "hours": "104",
       "link": "https://steamcommunity.com/app/1905180"
     },
     {
       "name": "Worst Class Ever Demo",
-      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/5354030/cd65a532953e089c1ca950a40334405d4ac118de.jpg",
+      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/5354030/cd65a532953e089c1ca950a40334405d4ac118de.jpg",
       "hours": "0.4",
       "link": "https://steamcommunity.com/app/5354030"
     }
   ],
-  "lastUpdate": "2026-10-29T14:29:59Z"
+  "lastUpdate": "2026-10-29T19:45:45Z"
 }
