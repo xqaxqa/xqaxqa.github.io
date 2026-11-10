@@ -24,11 +24,17 @@
       "link": "https://steamcommunity.com/app/3892270"
     },
     {
+      "name": "Arctic Drive Demo",
+      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/4601500/a0109987c35467bb34f5b29ba5c36a7ab544aa3f.jpg",
+      "hours": "1.8",
+      "link": "https://steamcommunity.com/app/4601500"
+    },
+    {
       "name": "OBS Studio",
       "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/1905180/b030cbb319718e6e06ce707ae564e0dd6e560735.jpg",
       "hours": "105",
       "link": "https://steamcommunity.com/app/1905180"
     }
   ],
-  "lastUpdate": "2026-11-10T02:41:03Z"
+  "lastUpdate": "2026-11-10T10:22:09Z"
 }
