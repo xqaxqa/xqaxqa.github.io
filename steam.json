@@ -24,6 +24,12 @@
       "link": "https://steamcommunity.com/app/4601500"
     },
     {
+      "name": "Euro Truck Simulator 2",
+      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/227300/adc18a4fc9adc0330144b76d61cbda68bb2394a0.jpg",
+      "hours": "33",
+      "link": "https://steamcommunity.com/app/227300"
+    },
+    {
       "name": "Grand Theft Auto V Enhanced",
       "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/3240220/8355a7bbdb704f727bfba80ec56bc7228991338e.jpg",
       "hours": "195",
@@ -34,13 +40,7 @@
       "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/1905180/b030cbb319718e6e06ce707ae564e0dd6e560735.jpg",
       "hours": "105",
       "link": "https://steamcommunity.com/app/1905180"
-    },
-    {
-      "name": "Sky: Children of the Light",
-      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/2325290/6901b8c6fdd72931f3eedcbbe07039e9c3a24be4.jpg",
-      "hours": "11.5",
-      "link": "https://steamcommunity.com/app/2325290"
     }
   ],
-  "lastUpdate": "2026-11-13T07:56:19Z"
+  "lastUpdate": "2026-11-13T15:46:33Z"
 }
