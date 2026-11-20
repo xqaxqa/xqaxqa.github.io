@@ -1,5 +1,5 @@
 {
-  "status": "in-game",
+  "status": "offline",
   "gameName": "",
   "gameIcon": "",
   "gameLogo": "",
@@ -8,7 +8,7 @@
     {
       "name": "ROB RUN",
       "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/4262460/6925066dc70cf9453455a8c1db9539521a116f63.jpg",
-      "hours": "7.2",
+      "hours": "9.3",
       "link": "https://steamcommunity.com/app/4262460"
     },
     {
@@ -42,5 +42,5 @@
       "link": "https://steamcommunity.com/app/4678800"
     }
   ],
-  "lastUpdate": "2026-11-20T02:41:59Z"
+  "lastUpdate": "2026-11-20T10:28:40Z"
 }
