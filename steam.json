@@ -8,20 +8,20 @@
     {
       "name": "ROB RUN",
       "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/4262460/6925066dc70cf9453455a8c1db9539521a116f63.jpg",
-      "hours": "9.9",
+      "hours": "10.6",
       "link": "https://steamcommunity.com/app/4262460"
-    },
-    {
-      "name": "Mayday Airways Demo",
-      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/5480890/5489d0b2cec8b715823667370e1fa48bdb1eda5d.jpg",
-      "hours": "6.4",
-      "link": "https://steamcommunity.com/app/5480890"
     },
     {
       "name": "Euro Truck Simulator 2",
       "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/227300/adc18a4fc9adc0330144b76d61cbda68bb2394a0.jpg",
       "hours": "37",
       "link": "https://steamcommunity.com/app/227300"
+    },
+    {
+      "name": "Mayday Airways Demo",
+      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/5480890/5489d0b2cec8b715823667370e1fa48bdb1eda5d.jpg",
+      "hours": "6.4",
+      "link": "https://steamcommunity.com/app/5480890"
     },
     {
       "name": "PEAK",
@@ -42,5 +42,5 @@
       "link": "https://steamcommunity.com/app/4678800"
     }
   ],
-  "lastUpdate": "2026-11-20T18:42:10Z"
+  "lastUpdate": "2026-11-21T00:12:55Z"
 }
