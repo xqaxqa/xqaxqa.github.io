@@ -1,12 +1,13 @@
 {
   "isLive": false,
   "status": 0,
-  "title": "三角洲考核俱乐部急缺强力打手、护子，欢迎老板咨询体验",
+  "title": "",
   "nickname": "",
   "userCount": "0",
-  "roomId": "7697599878960417587",
+  "roomId": "",
   "coverUrl": "",
   "streamId": "",
-  "checkedAt": "2026-11-25T19:16:02.051Z",
-  "method": "api"
+  "checkedAt": "2026-11-26T02:15:07.989Z",
+  "method": "page",
+  "error": "HTTP timeout"
 }
