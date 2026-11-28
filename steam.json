@@ -7,40 +7,40 @@
   "recentGames": [
     {
       "name": "ROB RUN",
-      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/4262460/6925066dc70cf9453455a8c1db9539521a116f63.jpg",
+      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/4262460/6925066dc70cf9453455a8c1db9539521a116f63.jpg",
       "hours": "22",
       "link": "https://steamcommunity.com/app/4262460"
     },
     {
       "name": "Euro Truck Simulator 2",
-      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/227300/adc18a4fc9adc0330144b76d61cbda68bb2394a0.jpg",
+      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/227300/adc18a4fc9adc0330144b76d61cbda68bb2394a0.jpg",
       "hours": "39",
       "link": "https://steamcommunity.com/app/227300"
     },
     {
       "name": "It Takes Two",
-      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/1426210/6b15f6d81c4fc52056f4928b363b7fac591a945b.jpg",
+      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/1426210/6b15f6d81c4fc52056f4928b363b7fac591a945b.jpg",
       "hours": "4.7",
       "link": "https://steamcommunity.com/app/1426210"
     },
     {
       "name": "Mayday Airways Demo",
-      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/5480890/5489d0b2cec8b715823667370e1fa48bdb1eda5d.jpg",
+      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/5480890/5489d0b2cec8b715823667370e1fa48bdb1eda5d.jpg",
       "hours": "6.4",
       "link": "https://steamcommunity.com/app/5480890"
     },
     {
       "name": "Train Sim World® 7",
-      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/4678800/93f9d30601bfba7164c117cc316dfd5ecc186d71.jpg",
+      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/4678800/93f9d30601bfba7164c117cc316dfd5ecc186d71.jpg",
       "hours": "1.4",
       "link": "https://steamcommunity.com/app/4678800"
     },
     {
-      "name": "PEAK",
-      "icon": "https://shared.akamai.steamstatic.com/community_assets/images/apps/3527290/b3a992fd5991bd2f4c956d58e062b0ce2988d6cd.jpg",
-      "hours": "11.9",
-      "link": "https://steamcommunity.com/app/3527290"
+      "name": "Grand Theft Auto V Enhanced",
+      "icon": "https://shared.fastly.steamstatic.com/community_assets/images/apps/3240220/8355a7bbdb704f727bfba80ec56bc7228991338e.jpg",
+      "hours": "196",
+      "link": "https://steamcommunity.com/app/3240220"
     }
   ],
-  "lastUpdate": "2026-11-27T19:54:35Z"
+  "lastUpdate": "2026-11-28T02:17:17Z"
 }
